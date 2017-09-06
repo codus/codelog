@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'fileutils'
+include FileUtils
+
+chdir Dir.pwd do
+  version_changelogs = Dir["changelogs/releases/*.md"]
+
+  version_changelogs.sort_by! do |file_name|
+    version_number = file_name.split('/').last.chomp('.md')
+    Gem::Version.new(version_number)
+  end.reverse!
+
+  changelog = []
+
+  version_changelogs.each do |version_changelog|
+    changelog += File.readlines(version_changelog)
+  end
+
+  File.open("CHANGELOG.md", "w+") do |f|
+    f.puts %(# Changelog
+  All notable changes to this project will be documented in this file.
+
+  The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+  and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+    )
+    f.puts(changelog)
+  end
+end

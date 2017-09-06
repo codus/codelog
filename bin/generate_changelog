@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+version = ARGV[0]
+
+if version.nil?
+  abort("ERROR: Please enter a version number")
+end
+
+system("create_version_changelog #{version}")
+system("remove_change_files")
+system("create_full_changelog")

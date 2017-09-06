@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'yaml'
+require 'fileutils'
+include FileUtils
+
+version = ARGV[0]
+
+if version.nil?
+  abort("ERROR: Please enter a version number")
+end
+
+chdir Dir.pwd do
+  change_files_paths = Dir["changelogs/unreleased/*.yml"]
+
+  all_changes = Hash.new([])
+
+  change_files_paths.each do |change_file|
+    changes_per_category = YAML.load_file(change_file)
+    all_changes.merge!(changes_per_category) { |category, changes, changes_to_be_added| changes | changes_to_be_added }
+  end
+
+  File.open("changelogs/releases/#{version}.md", 'a') do |line|
+    line.puts "## #{version}"
+    all_changes.each do |category, changes|
+      line.puts "### #{category}"
+      changes.each do |change|
+        line.puts "- #{change}"
+      end
+    end
+    line.puts "\n---\n"
+  end
+end
