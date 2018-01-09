@@ -19,5 +19,6 @@ engines:
 ratings:
   paths:
     - lib/**
+    - bin/**
 exclude_paths:
   - spec/**/*
