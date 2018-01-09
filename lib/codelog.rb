@@ -1,7 +1,6 @@
-require "codelog/version"
-require "codelog/cli"
-require "codelog/actions/setup"
+require 'codelog/version'
+require 'codelog/cli'
+require 'codelog/command/setup'
 
 module Codelog
-  # Your code goes here...
 end
