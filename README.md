@@ -1,8 +1,6 @@
 # Codelog
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/maintainability)](https://codeclimate.com/github/codus/codelog/maintainability)
-
-[![Test Coverage](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/test_coverage)](https://codeclimate.com/github/codus/codelog/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/maintainability)](https://codeclimate.com/github/codus/codelog/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/test_coverage)](https://codeclimate.com/github/codus/codelog/test_coverage)
 
 This gem provides a simple way to manage changelogs, avoiding conflicts and missplaced informations. Changes are handled as if they were "migrations" and built when the version is closed, allowing a more precise knowledge of what changes were made to what version.
 
@@ -11,7 +9,7 @@ This gem provides a simple way to manage changelogs, avoiding conflicts and miss
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'changelog'
+gem 'codelog'
 ```
 
 And then execute:
