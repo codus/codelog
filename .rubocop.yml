@@ -1,0 +1,16 @@
+inherit_from: .rubocop_todo.yml
+
+Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 100
+  IgnoredPatterns: ['\A#']
+
+AllCops:
+  Exclude:
+    - codelog.gemspec
+    - 'bin/**/*'
