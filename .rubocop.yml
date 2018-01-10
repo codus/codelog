@@ -10,6 +10,9 @@ Metrics/LineLength:
   Max: 100
   IgnoredPatterns: ['\A#']
 
+Style/WordArray:
+  EnforcedStyle: brackets
+
 AllCops:
   Exclude:
     - codelog.gemspec
