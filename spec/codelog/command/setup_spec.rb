@@ -20,7 +20,7 @@ describe Codelog::Command::Setup do
       expect(subject).to have_received(:system).with('mkdir changelogs/releases')
     end
 
-    it 'creates a teallow()mplate file' do
+    it 'creates a template file' do
       expect(subject).to have_received(:system).with('touch changelogs/template.yml')
     end
   end
