@@ -9,7 +9,7 @@ describe Codelog::CLI do
   end
 
   context 'with any valid command' do
-    VALID_COMMANDS = ['setup', 'new'].freeze
+    VALID_COMMANDS = ['setup', 'new', 'delete'].freeze
 
     VALID_COMMANDS.each do |command|
       it "calls the #{command} command" do

@@ -12,5 +12,10 @@ module Codelog
     def new
       Codelog::Command::New.run
     end
+
+    desc 'delete', 'Delete all change files at unreleased folder'
+    def delete
+      Codelog::Command::Delete.run
+    end
   end
 end
