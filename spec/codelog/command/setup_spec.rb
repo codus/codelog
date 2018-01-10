@@ -4,7 +4,7 @@ describe Codelog::Command::Setup do
   describe '#run' do
     before :each do
       allow(subject).to receive(:system) { true }
-      allow($stdout).to receive(:puts)
+      allow(subject).to receive(:puts).with('== Creating folder structure and template ==')
       subject.run
     end
 
@@ -20,8 +20,15 @@ describe Codelog::Command::Setup do
       expect(subject).to have_received(:system).with('mkdir changelogs/releases')
     end
 
-    it 'creates a template file' do
+    it 'creates a teallow()mplate file' do
       expect(subject).to have_received(:system).with('touch changelogs/template.yml')
+    end
+  end
+
+  describe '.run' do
+    it 'creates an instance of the class to run the command' do
+      expect_any_instance_of(described_class).to receive(:run)
+      described_class.run
     end
   end
 end

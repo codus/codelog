@@ -1,4 +1,7 @@
-# Changelog
+# Codelog
+[![Build Status](https://travis-ci.org/codus/codelog.svg?branch=master)](https://travis-ci.org/codus/codelog)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/maintainability)](https://codeclimate.com/github/codus/codelog/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/test_coverage)](https://codeclimate.com/github/codus/codelog/test_coverage)
 
 This gem provides a simple way to manage changelogs, avoiding conflicts and missplaced informations. Changes are handled as if they were "migrations" and built when the version is closed, allowing a more precise knowledge of what changes were made to what version.
 
@@ -7,7 +10,7 @@ This gem provides a simple way to manage changelogs, avoiding conflicts and miss
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'changelog'
+gem 'codelog'
 ```
 
 And then execute:
@@ -16,19 +19,19 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install changelog
+    $ gem install codelog
 
 ## Setup
 
-After the installation run:
+After the installation run the following command to generate the `changelogs` folder structure and the `template.yml` file:
 
 ``` bash
-changelog_setup
+codelog setup
 ```
 
-To generate the `changelogs` folder structure and the `template.yml` file.
-
-You should populate this template with the desired topics to be used in the changelog, as in the following example:
+The `template.yml` file will be used to create a new entry that will compose the next version changes file when it get closed.
+You should populate this template with the desired sections to compose the next versions changes to be added in the `CHANGELOG.md` file.
+The template can be as the following example:
 
 ```yaml
 "Features":
