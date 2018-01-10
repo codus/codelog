@@ -8,11 +8,16 @@ describe Codelog::CLI do
     end
   end
 
-  describe '#setup' do
-    it 'calls the setup method' do
-      allow(Codelog::Command::Setup).to receive(:run)
-      subject.setup
-      expect(Codelog::Command::Setup).to have_received(:run)
+  context 'with any valid command' do
+    VALID_COMMANDS = ['setup', 'new'].freeze
+
+    VALID_COMMANDS.each do |command|
+      it "calls the #{command} command" do
+        command_class = Module.const_get "Codelog::Command::#{command.capitalize}"
+        allow(command_class).to receive(:run)
+        subject.send(command)
+        expect(command_class).to have_received(:run)
+      end
     end
   end
 end
