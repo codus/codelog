@@ -16,13 +16,13 @@ gem 'codelog'
 And then execute:
 
 ``` bash
-bundle
+$ bundle
 ```
 
 Or install it yourself as:
 
 ``` bash
-gem install codelog
+$ gem install codelog
 ```
 
 ## Setup
@@ -30,7 +30,7 @@ gem install codelog
 After the installation run the following command to generate the `changelogs` folder structure and the `template.yml` file:
 
 ``` bash
-codelog setup
+$ codelog setup
 ```
 
 The `template.yml` file will be used to create a new change file. Change files from `unreleased` folder will compose the next release file when generated.
@@ -65,7 +65,7 @@ The template can be as the following example:
 After the initial setup every time a change is made, the user should run the following command in the project root path:
 
 ``` bash
-codelog new
+$ codelog new
 ```
 
 This will generate a change file on `changelogs/unreleased/` from the `template.yml` named with a timestamp value followed by `_change.yml`.
@@ -75,7 +75,7 @@ The new change file should be filled with informations about the implemented cha
 When closing a version you should run the following command:
 
 ``` bash
-codelog generate -v {x.y.z}
+$ codelog generate -v {x.y.z}
 ```
 
 It will execute 3 complamentary actions:
@@ -87,7 +87,7 @@ It will execute 3 complamentary actions:
 You can also run the `generate` parcialy using the other command options. To see all the options, consult the manual with the following command:
 
 ``` bash
-codelog help generate
+$ codelog help generate
 ```
 
 ## Contributing

@@ -37,13 +37,13 @@ Also make sure to add good tests to your new code. Only refactoring of tested fe
 Once you cloned the gem at your local machine you should run the following command at its root folder:
 
 ``` bash
-bundle
+$ bundle
 ```
 
 After that, you can run the tests suite also at the root folder by:
 
 ``` bash
-rspec
+$ rspec
 ```
 
 ## Adding entry to Changelog
