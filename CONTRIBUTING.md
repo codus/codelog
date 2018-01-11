@@ -40,7 +40,7 @@ Once you cloned the gem at your local machine you should run the following comma
 $ bundle
 ```
 
-After that, you can run the tests suite also at the root folder by:
+After that, you can execute the tests suite by running the following command at the root folder:
 
 ``` bash
 $ rspec

@@ -99,4 +99,4 @@ Issue reports and pull requests are welcome on GitHub at https://github.com/codu
 This software was released under MIT License. Read [License] for further informations.
 
 [Contributing guide]: https://github.com/codus/codelog/blob/master/CONTRIBUTING.md
-[License]: https://github.com/codus/codelog/blob/master/LICENSE.md
+[License]: https://github.com/codus/codelog/blob/master/LICENSE
