@@ -1,4 +1,5 @@
-# Codelog
+![CodeLog logo](https://raw.githubusercontent.com/codus/codelog/master/codelog.png)
+
 [![Build Status](https://travis-ci.org/codus/codelog.svg?branch=master)](https://travis-ci.org/codus/codelog)
 [![Maintainability](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/maintainability)](https://codeclimate.com/github/codus/codelog/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/test_coverage)](https://codeclimate.com/github/codus/codelog/test_coverage)
