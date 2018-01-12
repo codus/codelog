@@ -28,6 +28,11 @@ describe Codelog::Command::Setup do
     it 'creates a .gitkeep file on the unreleased folder' do
       expect(subject).to have_received(:system).with('touch changelogs/unreleased/.gitkeep')
     end
+
+
+    it 'creates a .gitkeep file on the releases folder' do
+      expect(subject).to have_received(:system).with('touch changelogs/releases/.gitkeep')
+    end
   end
 
   describe '.run' do

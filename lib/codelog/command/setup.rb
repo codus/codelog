@@ -21,6 +21,7 @@ module Codelog
           system! 'mkdir changelogs/releases'
           system! "cp #{TEMPLATE_FILE_PATH} changelogs/template.yml"
           system! 'touch changelogs/unreleased/.gitkeep'
+          system! 'touch changelogs/releases/.gitkeep'
         end
       end
 
