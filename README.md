@@ -75,20 +75,14 @@ The new change file should be filled with informations about the implemented cha
 When closing a version you should run the following command:
 
 ``` bash
-$ codelog generate -v {x.y.z}
+$ codelog release {x.y.z}
 ```
 
-It will execute 3 complamentary actions:
+It will execute 3 steps:
 
 - Generate a new release file at `changelogs/releases/` by merging all change files at `changelogs/unreleased/`
 - Deletes the change files at `changelogs/unreleased/` because they now compose the new release. If it was not deleted, the change would appear repeated in the next release.
 - Updates the `CHANGELOG.md` file by merging all the releases at `changelogs/releases/`.
-
-You can also run the `generate` parcialy using the other command options. To see all the options, consult the manual with the following command:
-
-``` bash
-$ codelog help generate
-```
 
 ## Contributing
 
