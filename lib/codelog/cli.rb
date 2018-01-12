@@ -13,9 +13,9 @@ module Codelog
       Codelog::Command::New.run
     end
 
-    desc 'delete', 'Delete all change files at unreleased folder'
-    def delete
-      Codelog::Command::Delete.run
+    desc 'release [VERSION]', 'Generate new release updating changelog'
+    def release(version_number)
+      Codelog::Command::Release.run version_number
     end
   end
 end
