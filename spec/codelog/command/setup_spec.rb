@@ -4,6 +4,7 @@ describe Codelog::Command::Setup do
   describe '#run' do
     before :each do
       allow(subject).to receive(:system) { true }
+      stub_const('Codelog::Command::Setup::TEMPLATE_FILE_PATH', '/my/path')
       allow(subject).to receive(:puts).with('== Creating folder structure and template ==')
       subject.run
     end
@@ -20,11 +21,11 @@ describe Codelog::Command::Setup do
       expect(subject).to have_received(:system).with('mkdir changelogs/releases')
     end
 
-    it 'creates a template file' do
-      expect(subject).to have_received(:system).with('touch changelogs/template.yml')
+    it 'copy the template fixture file to the changelogs folder' do
+      expect(subject).to have_received(:system).with('cp /my/path changelogs/template.yml')
     end
 
-    it 'creates a .gitkeep file on the unreleased folder'  do
+    it 'creates a .gitkeep file on the unreleased folder' do
       expect(subject).to have_received(:system).with('touch changelogs/unreleased/.gitkeep')
     end
   end
