@@ -98,5 +98,9 @@ Issue reports and pull requests are welcome on GitHub at https://github.com/codu
 
 This software was released under MIT License. Read [License] for further informations.
 
+Copyright 2018 Codus. http://www.codus.com.br
+
+You are not granted rights or licenses to the trademarks of Codus, including without limitation the Codelog name or logo.
+
 [Contributing guide]: https://github.com/codus/codelog/blob/master/CONTRIBUTING.md
 [License]: https://github.com/codus/codelog/blob/master/LICENSE
