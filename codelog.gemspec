@@ -14,6 +14,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'A simple to use gem made to help managing changelogs avoiding conflicts and missplaced changes'
   spec.license       = 'MIT'
   spec.homepage      = 'https://github.com/codus/codelog'
+  spec.files         = Dir.glob("{bin,lib}/**/*") + %w(CHANGELOG.md CODE_OF_CONDUCT.md CONTRIBUTING.md LICENSE Rakefile README.md)
 
   spec.executables   = ['codelog']
   spec.require_paths = ['lib']
