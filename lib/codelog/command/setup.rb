@@ -18,6 +18,7 @@ module Codelog
           system! 'mkdir changelogs/unreleased'
           system! 'mkdir changelogs/releases'
           system! 'touch changelogs/template.yml'
+          system! 'touch changelogs/unreleased/.gitkeep'
         end
       end
 

@@ -23,6 +23,10 @@ describe Codelog::Command::Setup do
     it 'creates a template file' do
       expect(subject).to have_received(:system).with('touch changelogs/template.yml')
     end
+
+    it 'creates a .gitkeep file on the unreleased folder'  do
+      expect(subject).to have_received(:system).with('touch changelogs/unreleased/.gitkeep')
+    end
   end
 
   describe '.run' do
