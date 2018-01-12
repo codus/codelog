@@ -11,13 +11,13 @@ Gem::Specification.new do |spec|
   spec.email         = ['opensource@codus.com.br']
 
   spec.summary       = 'A gem to help with changelog management'
-  spec.description   = 'A gem made to help managing changelogs avoiding conflicts and missplaced changes'
+  spec.description   = 'A simple to use gem made to help managing changelogs avoiding conflicts and missplaced changes'
   spec.license       = 'MIT'
   spec.homepage      = 'https://github.com/codus/codelog'
 
   spec.executables   = ['codelog']
   spec.require_paths = ['lib']
-  spec.post_install_message = 'To start using the changelog run `codelog setup` and fill the `template.yml` file'
+  spec.post_install_message = 'To start using the codelog run `codelog setup` and fill the `template.yml` file'
 
   spec.add_runtime_dependency "thor", "~> 0.20.0"
 
