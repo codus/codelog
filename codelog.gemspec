@@ -5,16 +5,18 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "codelog/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "codelog"
-  spec.version       = Codelog::VERSION
-  spec.authors       = ["Luís Bevilacqua"]
-  spec.email         = ["luis.bevilacqua@codus.com.br"]
+  spec.name          = 'codelog'
+  spec.version       = Codelog::VERSION.dup
+  spec.authors       = ['Luís Bevilacqua', 'Rodrigo Masaru', 'Fernanda Thomazinho', 'Celso Crivelaro']
+  spec.email         = ['opensource@codus.com.br']
 
   spec.summary       = 'A gem to help with changelog management'
-  spec.description   = 'A simple gem made to help managing changelogs avoiding conflicts and missplaced changes'
+  spec.description   = 'A gem made to help managing changelogs avoiding conflicts and missplaced changes'
+  spec.license       = 'MIT'
+  spec.homepage      = 'https://github.com/codus/codelog'
 
   spec.executables   = ['codelog']
-  spec.require_paths = ["lib"]
+  spec.require_paths = ['lib']
   spec.post_install_message = 'To start using the changelog run `codelog setup` and fill the `template.yml` file'
 
   spec.add_runtime_dependency "thor", "~> 0.20.0"
