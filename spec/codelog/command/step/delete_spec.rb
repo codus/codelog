@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Codelog::Command::Delete do
+describe Codelog::Command::Step::Delete do
   describe '#run' do
     before :each do
       allow(subject).to receive(:system) { true }
