@@ -7,7 +7,7 @@ require "codelog/version"
 Gem::Specification.new do |spec|
   spec.name          = 'codelog'
   spec.version       = Codelog::VERSION.dup
-  spec.authors       = ['Luís Bevilacqua', 'Rodrigo Masaru', 'Fernanda Thomazinho', 'Celso Crivelaro']
+  spec.authors       = ['Luís Bevilacqua', 'Rodrigo Masaru', 'Fernanda Thomazinho', 'Celso Crivelaro', 'Vinicius Oyama']
   spec.email         = ['opensource@codus.com.br']
 
   spec.summary       = 'A gem to help with changelog management'
