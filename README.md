@@ -88,6 +88,11 @@ It will execute 3 steps:
 
 Issue reports and pull requests are welcome on GitHub at https://github.com/codus/codelog. Read our [Contributing guide] for instructions on how to do it.
 
+## Supported Ruby Versions
+
+- Ruby 2.1.10+
+- JRuby 9.1.14.0+
+
 ## License
 
 This software was released under MIT License. Read [License] for further informations.
