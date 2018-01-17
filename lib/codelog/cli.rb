@@ -1,4 +1,5 @@
 require 'thor'
+require 'date'
 
 module Codelog
   class CLI < Thor
@@ -14,8 +15,9 @@ module Codelog
     end
 
     desc 'release [VERSION]', 'Generate new release updating changelog'
+    method_option :date, aliases: '-d', default: Date.today.to_s, desc: 'Date to be printed'
     def release(version_number)
-      Codelog::Command::Release.run version_number
+      Codelog::Command::Release.run version_number, options[:date]
     end
   end
 end
