@@ -4,7 +4,7 @@ header_text: "All notable changes to this project will be documented in this fil
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)\n
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).\n\n"
 
-default_filename: CHANGELOGY.md
+default_filename: CHANGELOG.md
 
 # Tag formatting  ---------------------------------------------------
 
