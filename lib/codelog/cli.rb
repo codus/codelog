@@ -1,4 +1,5 @@
 require 'thor'
+require 'date'
 
 module Codelog
   class CLI < Thor
@@ -8,14 +9,13 @@ module Codelog
     end
 
     desc 'new', 'Generate a file from the template for the unreleased changes'
-    method_option :change, aliases: '-c', default: true, desc: 'Create a change file'
     def new
       Codelog::Command::New.run
     end
 
-    desc 'release [VERSION]', 'Generate new release updating changelog'
-    def release(version_number)
-      Codelog::Command::Release.run version_number
+    desc 'release [VERSION] <RELEASE_DATE>', 'Generate new release updating changelog'
+    def release(version_number, release_date = Date.today.to_s)
+      Codelog::Command::Release.run version_number, release_date
     end
   end
 end
