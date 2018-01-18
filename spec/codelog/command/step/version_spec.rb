@@ -14,7 +14,7 @@ describe Codelog::Command::Step::Version do
       allow(YAML).to receive(:load_file).with('file_2.yml') { { 'Category_1' => ['value_2'] } }
 
       allow(subject).to receive(:version_exists?).and_return(false)
-      allow(subject).to receive(:has_unreleased_changes?).and_return(true)
+      allow(subject).to receive(:unreleased_changes?).and_return(true)
     end
 
     it 'merges the content of the files with the same category' do
@@ -38,8 +38,38 @@ describe Codelog::Command::Step::Version do
     end
 
     it 'checks the existence of change files' do
-      expect(subject).to receive(:has_unreleased_changes?)
+      expect(subject).to receive(:unreleased_changes?)
       subject.run
+    end
+
+    describe 'without a given version' do
+      subject { described_class.new(nil) }
+
+      it 'aborts with the appropriate error message' do
+        expect(subject).to receive(:abort).with Codelog::Message::Error.missing_version_number
+
+        subject.run
+      end
+    end
+
+    describe 'with an already existing version' do
+      before { allow(subject).to receive(:version_exists?).and_return(true) }
+
+      it 'aborts with the appropriate error message' do
+        expect(subject).to receive(:abort).with Codelog::Message::Error.already_existing_version('1.2.3')
+
+        subject.run
+      end
+    end
+
+    describe 'with no changes to be released' do
+      before { allow(subject).to receive(:unreleased_changes?).and_return(false) }
+
+      it 'throws the appropriate error message' do
+        expect(subject).to receive(:abort).with Codelog::Message::Error.no_detected_changes('1.2.3')
+
+        subject.run
+      end
     end
   end
 

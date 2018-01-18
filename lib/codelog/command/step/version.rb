@@ -8,21 +8,21 @@ module Codelog
       class Version
         include FileUtils
 
-        RELEASES_PATH = "changelogs/releases"
-        UNRELEASED_LOGS_PATH = "changelogs/unreleased"
+        RELEASES_PATH = 'changelogs/releases'.freeze
+        UNRELEASED_LOGS_PATH = 'changelogs/unreleased'.freeze
 
-        def initialize(version, release_date=Date.today.to_s)
+        def initialize(version, release_date = Date.today.to_s)
           @version = version
           @release_date = Date.parse(release_date).to_s
         end
 
-        def self.run(version, release_date=Date.today.to_s)
+        def self.run(version, release_date = Date.today.to_s)
           Codelog::Command::Step::Version.new(version, release_date).run
         end
 
         def run
-          abort('ERROR: Please enter a version number') if @version.nil?
-          abort('ERROR: Version already exists') if version_exists?
+          abort(Codelog::Message::Error.missing_version_number) if @version.nil?
+          abort(Codelog::Message::Error.already_existing_version(@version)) if version_exists?
           chdir Dir.pwd do
             create_version_changelog_from changes_hash
           end
@@ -31,7 +31,7 @@ module Codelog
         private
 
         def changes_hash
-          abort('ERROR: No changes to be added') unless has_unreleased_changes?
+          abort(Codelog::Message::Error.no_detected_changes(@version)) unless unreleased_changes?
           change_files_paths = Dir["#{UNRELEASED_LOGS_PATH}/*.yml"]
           change_files_paths.inject({}) do |all_changes, change_file|
             changes_per_category = YAML.load_file(change_file)
@@ -57,7 +57,7 @@ module Codelog
           File.file?("#{RELEASES_PATH}/#{@version}.md")
         end
 
-        def has_unreleased_changes?
+        def unreleased_changes?
           Dir["#{UNRELEASED_LOGS_PATH}/*.yml"].any?
         end
       end

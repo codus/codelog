@@ -1,20 +1,7 @@
 "Added":
-  - New features implemented
+  - Datestamps along with version tag (synthax codelog release [x.y.z] <DATE>)
 
 "Changed":
-  - Changes to existing feature
-
-"Deprecated":
-  - Features that are soon to be removed
-
-"Removed":
-  - Features that were removed
-
-"Fixed":
-  - Changes to broken code
-
-"Security":
-  - Changes that fix vulnerabilities
-
-"Deploy notes":
-  - Changes that should impact the deploy process and what should be made before it
+  - Insulated abort messages within Codelog::Messages
+  - Blocked attempt to release a changelog with no changes
+  - Blocked attempt to release repeated versions from a changelog
