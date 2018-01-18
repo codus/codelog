@@ -13,7 +13,9 @@ module Codelog
 
         def initialize(version, release_date = Date.today.to_s)
           @version = version
-          @release_date = Date.parse(release_date).to_s
+          @release_date = Date.strptime(release_date, Codelog::Config.date_input_format).to_s
+        rescue ArgumentError
+          abort(Codelog::Message::Error.invalid_date_format)
         end
 
         def self.run(version, release_date = Date.today.to_s)

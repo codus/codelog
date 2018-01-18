@@ -10,6 +10,11 @@ module Codelog
           "#{prefix}: Please enter a version number"
         end
 
+        def invalid_date_format
+          "#{prefix}: Invalid date format. Check the input date format on:\n\n" \
+          'changelogs/codelog.yml'
+        end
+
         def already_existing_version(version)
           "#{prefix}: Could not create release #{version}. Release #{version} already exists"
         end

@@ -30,7 +30,7 @@ module Codelog
         end
 
         def create_file_from(changes)
-          File.open('CHANGELOG.md', 'w+') do |f|
+          File.open(Codelog::Config.filename, 'w+') do |f|
             f.puts "# Changelog"
             f.puts Codelog::Config.header
             f.puts(changes)
