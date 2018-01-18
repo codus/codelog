@@ -1,0 +1,18 @@
+# Changelog Header  -------------------------------------------------
+
+header_text: "All notable changes to this project will be documented in this file.\n
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)\n
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html)."
+
+default_filename: CHANGELOG.md
+
+# Tag formatting  ---------------------------------------------------
+
+version_prefix: "[v"
+version_suffix: "]"
+date_prefix: ""
+date_suffix: ""
+
+# Date formatting  --------------------------------------------------
+
+date_formatting: "YYYY-MM-DD"

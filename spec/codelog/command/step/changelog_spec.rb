@@ -8,6 +8,7 @@ describe Codelog::Command::Step::Changelog do
       allow(Dir).to receive(:'[]').with('changelogs/releases/*.md') { ['0.1.0.md', '0.2.0.md'] }
       allow(File).to receive(:readlines).with('0.1.0.md') { ['line_1\n'] }
       allow(File).to receive(:readlines).with('0.2.0.md') { ['line_2\n'] }
+      allow(YAML).to receive(:load_file).with('changelogs/codelog.yml') { { 'header_text' => 'my_header_text' } }
     end
 
     it 'combines the content of the releases and put in an array' do

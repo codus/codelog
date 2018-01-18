@@ -12,6 +12,7 @@ describe Codelog::Command::Step::Version do
       end
       allow(YAML).to receive(:load_file).with('file_1.yml') { { 'Category_1' => ['value_1'] } }
       allow(YAML).to receive(:load_file).with('file_2.yml') { { 'Category_1' => ['value_2'] } }
+      allow(YAML).to receive(:load_file).with('changelogs/codelog.yml') { { 'header_text' => 'my_header_text' } }
 
       allow(subject).to receive(:version_exists?).and_return(false)
       allow(subject).to receive(:unreleased_changes?).and_return(true)
