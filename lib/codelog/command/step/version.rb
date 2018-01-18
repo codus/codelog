@@ -11,12 +11,12 @@ module Codelog
         RELEASES_PATH = 'changelogs/releases'.freeze
         UNRELEASED_LOGS_PATH = 'changelogs/unreleased'.freeze
 
-        def initialize(version, release_date = Date.today.to_s)
+        def initialize(version, release_date)
           @version = version
           @release_date = Date.parse(release_date).to_s
         end
 
-        def self.run(version, release_date = Date.today.to_s)
+        def self.run(version, release_date)
           Codelog::Command::Step::Version.new(version, release_date).run
         end
 
