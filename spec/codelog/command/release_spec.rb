@@ -7,6 +7,7 @@ describe Codelog::Command::Release do
         expect(Codelog::Command::Step::Version).to receive(:run).with '1.2.3', '12-12-2012'
         expect(Codelog::Command::Step::Delete).to receive(:run)
         expect(Codelog::Command::Step::Changelog).to receive(:run)
+        expect(subject).to receive(:puts).with("\n== Changelog updated to version 1.2.3 ==")
         subject.run '1.2.3', '12-12-2012'
       end
     end
