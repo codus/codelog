@@ -10,7 +10,7 @@ module Codelog
       end
 
       def header
-        settings['header_text'] || ''
+        File.open(settings['header_textfile'], 'r').read || ''
       end
 
       def date_input_format

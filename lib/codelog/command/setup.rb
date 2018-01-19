@@ -7,9 +7,10 @@ module Codelog
 
       TEMPLATE_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/template.yml')
       CONFIG_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/codelog.yml')
+      HEADER_FILE_PATH =File.dirname(__FILE__).concat('/../../fixtures/header.txt')
 
-      CHANGELOG_DEFAULT_PATH = 'CHANGELOG.md'
-      CHANGELOG_DESTINATION_PATH = 'changelogs/releases/0.0.0.md'
+      CHANGELOG_DEFAULT_PATH = 'CHANGELOG.md'.freeze
+      CHANGELOG_DESTINATION_PATH = 'changelogs/releases/0.0.0.md'.freeze
 
       def self.run
         Codelog::Command::Setup.new.run
@@ -25,6 +26,7 @@ module Codelog
           system! 'mkdir changelogs/releases'
           system! "cp #{TEMPLATE_FILE_PATH} changelogs/template.yml"
           system! "cp #{CONFIG_FILE_PATH} changelogs/codelog.yml"
+          system! "cp #{HEADER_FILE_PATH} changelogs/header.txt"
           system! 'touch changelogs/unreleased/.gitkeep'
           system! 'touch changelogs/releases/.gitkeep'
         end
@@ -37,11 +39,9 @@ module Codelog
           if yes? Codelog::Message::Warning.mantain_versioning_of_existing_changelog?
             puts '== Copying existing changelog to releases folder =='
             copy_and_mark_changelog
-          else
-            if yes? Codelog::Message::Warning.delete_existing_changelog?
-              puts '== Deleting existing changelog =='
-              system! "rm #{CHANGELOG_DEFAULT_PATH}"
-            end
+          elsif yes? Codelog::Message::Warning.delete_existing_changelog?
+            puts '== Deleting existing changelog =='
+            system! "rm #{CHANGELOG_DEFAULT_PATH}"
           end
         end
       end
@@ -65,7 +65,7 @@ module Codelog
 
       def yes?(*args)
         puts(*args)
-        STDIN.gets.chomp.downcase == 'y'
+        STDIN.gets.chomp.casecmp('y') == 0
       end
     end
   end

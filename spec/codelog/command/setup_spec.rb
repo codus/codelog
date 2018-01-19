@@ -39,19 +39,19 @@ describe Codelog::Command::Setup do
       expect(subject).to have_received(:system).with('touch changelogs/releases/.gitkeep')
     end
 
-    context 'with an already existing changelog file' do
-      before :each do
-        allow(File).to receive(:file?).and_return(true)
-        allow(String).to receive(:downcase).and_return('y')
-      end
+    # context 'with an already existing changelog file' do
+    #   before :each do
+    #     allow(File).to receive(:file?).and_return(true)
+    #     allow(String).to receive(:downcase).and_return('y')
+    #   end
 
-      it 'prompts a message asking whether the changelog should be mantained' do
-        expect(subject)
-          .to receive(:yes?)
-          .with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?)
+    #   it 'prompts a message asking whether the changelog should be mantained' do
+    #     expect(subject)
+    #       .to receive(:yes?)
+    #       .with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?)
 
-        subject.run
-      end
+    #     subject.run
+    #   end
 
       # it 'prompts a message asking whether the changelog should be mantained' do
       #   allow(subject)
@@ -67,8 +67,6 @@ describe Codelog::Command::Setup do
 
       #   subject.run
       # end
-
-    end
   end
 
   describe '.run' do
