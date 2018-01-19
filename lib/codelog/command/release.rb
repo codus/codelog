@@ -9,6 +9,7 @@ module Codelog
         Codelog::Command::Step::Version.run version_number, release_date
         Codelog::Command::Step::Delete.run
         Codelog::Command::Step::Changelog.run
+        puts "\n== Changelog updated to version #{version_number} =="
       end
     end
   end
