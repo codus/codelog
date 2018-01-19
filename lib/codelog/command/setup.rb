@@ -77,7 +77,7 @@ module Codelog
       end
 
       def receive(stdin: $stdin)
-        stdin.gets.casecmp('y').zero?
+        stdin.gets.chomp.casecmp('y').zero?
       end
     end
   end
