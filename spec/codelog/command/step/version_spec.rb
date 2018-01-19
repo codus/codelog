@@ -22,7 +22,7 @@ describe Codelog::Command::Step::Version do
         date_prefix: "",
         show_date: true,
         date_input_format: "%Y-%m-%d",
-        date_output_format: "%Y-%m-%d",
+        date_output_format: "%Y-%m-%d"
       }
     end
 

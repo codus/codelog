@@ -28,5 +28,23 @@ module Codelog
         end
       end
     end
+
+    class Warning
+      class << self
+        def prefix
+          'WARNING'
+        end
+
+        def mantain_versioning_of_existing_changelog?
+          "#{prefix}: There is already a file named CHANGELOG.md within " \
+          'your project. Do you wish to mantain its versioning? (Y/N)'
+        end
+
+        def delete_existing_changelog?
+          "#{prefix}: When generating a release for the first " \
+          'time, CHANGELOG.md will be erased. Do you wish to erase it now? (Y/N)'
+        end
+      end
+    end
   end
 end
