@@ -63,9 +63,13 @@ module Codelog
         system(*args) || abort("\n== Command #{args} failed ==")
       end
 
-      def yes?(*args)
-        puts(*args)
-        STDIN.gets.chomp.casecmp('y') == 0
+      def yes?(args)
+        puts(args)
+        receive
+      end
+
+      def receive(stdin: $stdin)
+        stdin.gets.casecmp('y') == 0
       end
     end
   end
