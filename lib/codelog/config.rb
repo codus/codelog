@@ -51,7 +51,7 @@ module Codelog
       end
 
       def settings
-        YAML.load_file(CONFIG_FILE_PATH)
+        @settings ||= YAML.load_file(CONFIG_FILE_PATH)
       end
     end
   end

@@ -4,8 +4,8 @@ describe Codelog::Config do
   before :each do
     stub_const('::Codelog::Config::CONFIG_FILE_PATH', '/my/path')
 
-    allow(YAML).to receive(:load_file).with('/my/path').and_return({
-      'default_changelog_filename' => 'CHANGELOG.md',
+    allow(described_class).to receive(:settings).and_return({
+      'default_changelog_filename' => 'CHANGELOGO.md',
       'header_textfile' => 'dummy_textfile.txt',
       'date_input_format' => '%Y-%m-%d',
       'date_output_format' => '%d-%m-%Y',
@@ -18,7 +18,7 @@ describe Codelog::Config do
 
   describe '#filename' do
     it 'returns the correct filename' do
-      expect(described_class.filename).to eq('CHANGELOG.md')
+      expect(described_class.filename).to eq('CHANGELOGO.md')
     end
   end
 
