@@ -7,7 +7,7 @@ module Codelog
 
       TEMPLATE_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/template.yml')
       CONFIG_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/codelog.yml')
-      HEADER_FILE_PATH =File.dirname(__FILE__).concat('/../../fixtures/header.txt')
+      HEADER_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/header.txt')
 
       CHANGELOG_DEFAULT_PATH = 'CHANGELOG.md'.freeze
       CHANGELOG_DESTINATION_PATH = 'changelogs/releases/0.0.0.md'.freeze
@@ -21,18 +21,27 @@ module Codelog
           # This script provides the initial setup for the gem usage.
           handle_existing_changelog
           puts '== Creating folder structure and template =='
-          system! 'mkdir changelogs/'
-          system! 'mkdir changelogs/unreleased'
-          system! 'mkdir changelogs/releases'
-          system! "cp #{TEMPLATE_FILE_PATH} changelogs/template.yml"
-          system! "cp #{CONFIG_FILE_PATH} changelogs/codelog.yml"
-          system! "cp #{HEADER_FILE_PATH} changelogs/header.txt"
-          system! 'touch changelogs/unreleased/.gitkeep'
-          system! 'touch changelogs/releases/.gitkeep'
+          create_folder_structure
+          puts '== Copying fixtures =='
+          copy_fixtures
         end
       end
 
       private
+
+      def create_folder_structure
+        system! 'mkdir changelogs/'
+        system! 'mkdir changelogs/unreleased'
+        system! 'mkdir changelogs/releases'
+        system! 'touch changelogs/unreleased/.gitkeep'
+        system! 'touch changelogs/releases/.gitkeep'
+      end
+
+      def copy_fixtures
+        system! "cp #{TEMPLATE_FILE_PATH} changelogs/template.yml"
+        system! "cp #{CONFIG_FILE_PATH} changelogs/codelog.yml"
+        system! "cp #{HEADER_FILE_PATH} changelogs/header.txt"
+      end
 
       def handle_existing_changelog
         if old_changelog_exists?
@@ -69,7 +78,7 @@ module Codelog
       end
 
       def receive(stdin: $stdin)
-        stdin.gets.casecmp('y') == 0
+        stdin.gets.casecmp('y').zero?
       end
     end
   end

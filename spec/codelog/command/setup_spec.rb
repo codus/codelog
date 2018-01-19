@@ -37,9 +37,6 @@ describe Codelog::Command::Setup do
   end
 
   describe '#handle_existing_changelog' do
-    let(:positive_response) { StringIO.new('y') }
-    let(:negative_response) { StringIO.new('n') }
-
     before :each do
       allow(subject).to receive(:system) { true }
       stub_const('Codelog::Command::Setup::TEMPLATE_FILE_PATH', '/my/path')
