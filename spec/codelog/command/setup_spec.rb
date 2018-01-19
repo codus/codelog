@@ -7,6 +7,7 @@ describe Codelog::Command::Setup do
       stub_const('Codelog::Command::Setup::TEMPLATE_FILE_PATH', '/my/path')
       stub_const('Codelog::Command::Setup::CONFIG_FILE_PATH', '/my/config_path')
       allow(subject).to receive(:puts).with('== Creating folder structure and template ==')
+      allow(subject).to receive(:puts).with('== Copying fixtures ==')
       allow(File).to receive(:file?).and_return(false)
       subject.run
     end
@@ -43,6 +44,7 @@ describe Codelog::Command::Setup do
       stub_const('Codelog::Command::Setup::CONFIG_FILE_PATH', '/my/config_path')
 
       allow(subject).to receive(:puts).with('== Creating folder structure and template ==')
+      allow(subject).to receive(:puts).with('== Copying fixtures ==')
       allow(File).to receive(:file?).and_return(true)
     end
 

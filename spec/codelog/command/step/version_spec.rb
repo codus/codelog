@@ -16,7 +16,7 @@ describe Codelog::Command::Step::Version do
     let(:mocked_config_file) do
       {
         header_text: "dummy_header",
-        default_filename: "CHANGELOG.md",
+        default_changelog_filename: "CHANGELOG.md",
         version_prefix: "",
         version_suffix: "",
         date_prefix: "",

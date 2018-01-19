@@ -44,14 +44,13 @@ module Codelog
       end
 
       def handle_existing_changelog
-        if old_changelog_exists?
-          if yes? Codelog::Message::Warning.mantain_versioning_of_existing_changelog?
-            puts '== Copying existing changelog to releases folder =='
-            copy_and_mark_changelog
-          elsif yes? Codelog::Message::Warning.delete_existing_changelog?
-            puts '== Deleting existing changelog =='
-            system! "rm #{CHANGELOG_DEFAULT_PATH}"
-          end
+        return unless old_changelog_exists?
+        if yes? Codelog::Message::Warning.mantain_versioning_of_existing_changelog?
+          puts '== Copying existing changelog to releases folder =='
+          copy_and_mark_changelog
+        elsif yes? Codelog::Message::Warning.delete_existing_changelog?
+          puts '== Deleting existing changelog =='
+          system! "rm #{CHANGELOG_DEFAULT_PATH}"
         end
       end
 

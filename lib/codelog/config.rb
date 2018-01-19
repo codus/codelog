@@ -6,7 +6,7 @@ module Codelog
 
     class << self
       def filename
-        settings['default_filename'] || 'CHANGELOG.md'
+        settings['default_changelog_filename'] || 'CHANGELOG.md'
       end
 
       def header
@@ -51,7 +51,7 @@ module Codelog
       end
 
       def settings
-        @settings ||= YAML.load_file(CONFIG_FILE_PATH)
+        YAML.load_file(CONFIG_FILE_PATH)
       end
     end
   end
