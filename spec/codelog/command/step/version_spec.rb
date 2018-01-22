@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Codelog::Command::Step::Version do
   describe '#new' do
     it 'aborts when date format differs than the provided one' do
+      allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
       expect_any_instance_of(described_class).to receive(:abort).with Codelog::Message::Error.invalid_date_format
       described_class.new '1.2.4', '2012/12/12'
     end
@@ -13,32 +14,21 @@ describe Codelog::Command::Step::Version do
 
     let(:mocked_release_file) { double(File) }
 
-    let(:mocked_config_file) do
-      {
-        header_text: "dummy_header",
-        default_changelog_filename: "CHANGELOG.md",
-        version_prefix: "",
-        version_suffix: "",
-        date_prefix: "",
-        show_date: true,
-        date_input_format: "%Y-%m-%d",
-        date_output_format: "%Y-%m-%d"
-      }
-    end
-
     before :each do
       allow(Dir).to receive(:"[]").with('changelogs/unreleased/*.yml') do
         ['file_1.yml', 'file_2.yml']
       end
       allow(YAML).to receive(:load_file).with('file_1.yml') { { 'Category_1' => ['value_1'] } }
       allow(YAML).to receive(:load_file).with('file_2.yml') { { 'Category_1' => ['value_2'] } }
-      allow(YAML).to receive(:load_file).with('changelogs/codelog.yml').and_return(mocked_config_file)
+      allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
     end
 
     context "within normal run" do
       before :each do
         allow(File).to receive(:file?).and_return(false)
         allow(subject).to receive(:unreleased_changes?).and_return(true)
+        allow(Codelog::Config).to receive(:version_tag)
+          .with('1.2.3', '2012-12-12') { '1.2.3 2012-12-12' }
       end
 
       it 'merges the content of the files with the same category' do
@@ -52,7 +42,7 @@ describe Codelog::Command::Step::Version do
         allow(File).to receive(:open).with('changelogs/releases/1.2.3.md', 'a')
                                      .and_yield(mocked_release_file)
         subject.run
-        expect(mocked_release_file).to have_received(:puts).with '## 1.2.3 - 2012-12-12'
+        expect(mocked_release_file).to have_received(:puts).with '## 1.2.3 2012-12-12'
         expect(mocked_release_file).to have_received(:puts).with '### Category_1'
       end
 
@@ -72,6 +62,8 @@ describe Codelog::Command::Step::Version do
         before :each do
           allow(File).to receive(:file?).and_return(false)
           allow(subject).to receive(:unreleased_changes?).and_return(true)
+          allow(Codelog::Config).to receive(:version_tag)
+            .with(nil, '2012-12-12')
         end
 
         subject { described_class.new(nil, '2012-12-12') }
@@ -84,7 +76,11 @@ describe Codelog::Command::Step::Version do
       end
 
       describe 'with an already existing version' do
-        before { allow(subject).to receive(:version_exists?).and_return(true) }
+        before do
+          allow(subject).to receive(:version_exists?).and_return(true)
+          allow(Codelog::Config).to receive(:version_tag)
+            .with('1.2.3', '2012-12-12')
+        end
 
         it 'aborts with the appropriate error message' do
           expect(subject).to receive(:abort).with Codelog::Message::Error.already_existing_version('1.2.3')
@@ -97,6 +93,8 @@ describe Codelog::Command::Step::Version do
         before :each do
           allow(File).to receive(:file?).and_return(false)
           allow(Dir).to receive(:"[]").with('changelogs/unreleased/*.yml').and_return([])
+          allow(Codelog::Config).to receive(:version_tag)
+            .with('1.2.3', '2012-12-12')
         end
 
         it 'aborts with the appropriate error message' do
