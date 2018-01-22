@@ -5,8 +5,8 @@ default_changelog_filename: CHANGELOG.md
 
 # Tag formatting  ---------------------------------------------------
 
-version_prefix: "[v"
-version_suffix: "]"
+version_prefix: ""
+version_suffix: ""
 date_prefix: ""
 
 # Date formatting  --------------------------------------------------
