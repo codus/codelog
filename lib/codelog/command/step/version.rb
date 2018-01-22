@@ -25,6 +25,7 @@ module Codelog
         def run
           abort(Codelog::Message::Error.missing_version_number) if @version.nil?
           abort(Codelog::Message::Error.already_existing_version(@version)) if version_exists?
+          abort(Codelog::Message::Error.no_detected_changes(@version)) unless unreleased_changes?
           chdir Dir.pwd do
             create_version_changelog_from changes_hash
           end
@@ -33,7 +34,6 @@ module Codelog
         private
 
         def changes_hash
-          abort(Codelog::Message::Error.no_detected_changes(@version)) unless unreleased_changes?
           change_files_paths = Dir["#{UNRELEASED_LOGS_PATH}/*.yml"]
           change_files_paths.inject({}) do |all_changes, change_file|
             changes_per_category = YAML.load_file(change_file)

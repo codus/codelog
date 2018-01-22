@@ -52,7 +52,7 @@ describe Codelog::Command::Setup do
     it 'prompts a message asking if the old file should be versioned' do
       allow(subject).to receive(:receive).and_return true
       allow(subject).to receive(:puts).with('== Copying existing changelog to releases folder ==')
-
+      allow(subject).to receive(:copy_and_mark_changelog)
       expect(subject).to receive(:puts).with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?)
 
       subject.run

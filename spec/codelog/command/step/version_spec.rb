@@ -47,11 +47,13 @@ describe Codelog::Command::Step::Version do
       end
 
       it 'checks the existence of an already existing version of the release' do
+        allow(subject).to receive(:create_version_changelog_from)
         expect(subject).to receive(:version_exists?)
         subject.run
       end
 
       it 'checks the existence of change files' do
+        allow(subject).to receive(:create_version_changelog_from)
         expect(subject).to receive(:unreleased_changes?)
         subject.run
       end
@@ -62,6 +64,7 @@ describe Codelog::Command::Step::Version do
         before :each do
           allow(File).to receive(:file?).and_return(false)
           allow(subject).to receive(:unreleased_changes?).and_return(true)
+          allow(subject).to receive(:create_version_changelog_from)
           allow(Codelog::Config).to receive(:version_tag)
             .with(nil, '2012-12-12')
         end
@@ -78,13 +81,13 @@ describe Codelog::Command::Step::Version do
       describe 'with an already existing version' do
         before do
           allow(subject).to receive(:version_exists?).and_return(true)
+          allow(subject).to receive(:create_version_changelog_from)
           allow(Codelog::Config).to receive(:version_tag)
             .with('1.2.3', '2012-12-12')
         end
 
         it 'aborts with the appropriate error message' do
           expect(subject).to receive(:abort).with Codelog::Message::Error.already_existing_version('1.2.3')
-
           subject.run
         end
       end
@@ -92,6 +95,7 @@ describe Codelog::Command::Step::Version do
       describe 'with no changes to be released' do
         before :each do
           allow(File).to receive(:file?).and_return(false)
+          allow(subject).to receive(:create_version_changelog_from)
           allow(Dir).to receive(:"[]").with('changelogs/unreleased/*.yml').and_return([])
           allow(Codelog::Config).to receive(:version_tag)
             .with('1.2.3', '2012-12-12')
