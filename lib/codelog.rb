@@ -1,4 +1,5 @@
 require 'codelog/cli'
+require 'codelog/config'
 require 'codelog/message'
 require 'codelog/version'
 require 'codelog/command/setup'

@@ -1,0 +1,10 @@
+"Added":
+  - Optional parameters added to configuration file 'codelog.yml'
+    - Configurable filename
+    - Configurable input and output date formats
+    - Enable/Disable 'datestamps' within version tag
+    - Version prefix, version suffix and date prefix within version tag
+  - Previous existing changelog can now be merged upon 'codelog setup'
+
+"Changed":
+  - Changelog header is now configurable through 'changelogs/header.txt'

@@ -2,12 +2,15 @@ require 'spec_helper'
 
 describe Codelog::Command::Step::Changelog do
   let(:mocked_changelog) { double(File) }
+  let(:mocked_header_textfile) { double(File, read: 'stubbed read') }
 
   describe '#run' do
     before :each do
       allow(Dir).to receive(:'[]').with('changelogs/releases/*.md') { ['0.1.0.md', '0.2.0.md'] }
       allow(File).to receive(:readlines).with('0.1.0.md') { ['line_1\n'] }
       allow(File).to receive(:readlines).with('0.2.0.md') { ['line_2\n'] }
+      allow(File).to receive(:open).with('textfile.txt', 'r').and_return(mocked_header_textfile)
+      allow(YAML).to receive(:load_file).with('changelogs/codelog.yml') { { 'header_textfile' => 'textfile.txt' } }
     end
 
     it 'combines the content of the releases and put in an array' do

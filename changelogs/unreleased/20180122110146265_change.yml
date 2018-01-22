@@ -1,0 +1,2 @@
+"Changed":
+  - Altered setup to print message instead of aborting when creating files

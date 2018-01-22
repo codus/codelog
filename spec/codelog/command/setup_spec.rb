@@ -5,7 +5,10 @@ describe Codelog::Command::Setup do
     before :each do
       allow(subject).to receive(:system) { true }
       stub_const('Codelog::Command::Setup::TEMPLATE_FILE_PATH', '/my/path')
+      stub_const('Codelog::Command::Setup::CONFIG_FILE_PATH', '/my/config_path')
       allow(subject).to receive(:puts).with('== Creating folder structure and template ==')
+      allow(subject).to receive(:puts).with('== Copying fixtures ==')
+      allow(File).to receive(:file?).and_return(false)
       subject.run
     end
 
@@ -31,6 +34,70 @@ describe Codelog::Command::Setup do
 
     it 'creates a .gitkeep file on the releases folder' do
       expect(subject).to have_received(:system).with('touch changelogs/releases/.gitkeep')
+    end
+  end
+
+  describe '#handle_existing_changelog' do
+    before :each do
+      allow(subject).to receive(:system) { true }
+      stub_const('Codelog::Command::Setup::TEMPLATE_FILE_PATH', '/my/path')
+      stub_const('Codelog::Command::Setup::CONFIG_FILE_PATH', '/my/config_path')
+
+      allow(subject).to receive(:puts).with('== Creating folder structure and template ==')
+      allow(subject).to receive(:puts).with('== Copying fixtures ==')
+      allow(File).to receive(:file?).and_return(true)
+    end
+
+
+    it 'prompts a message asking if the old file should be versioned' do
+      allow(subject).to receive(:receive).and_return true
+      allow(subject).to receive(:puts).with('== Copying existing changelog to releases folder ==')
+
+      expect(subject).to receive(:puts).with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?)
+
+      subject.run
+    end
+
+    it 'calls the copy changelog method' do
+      allow(subject).to receive(:yes?).with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?).and_return(true)
+
+      expect(subject).to receive(:puts).with('== Copying existing changelog to releases folder ==')
+      expect(subject).to receive(:copy_and_mark_changelog)
+
+      subject.run
+    end
+
+    it 'prompts a message asking if the old file should be deleted' do
+      allow(subject).to receive(:receive).and_return false
+      allow(subject).to receive(:puts).with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?)
+
+      expect(subject).to receive(:puts).with(Codelog::Message::Warning.delete_existing_changelog?)
+
+      subject.run
+    end
+
+    it 'deletes the existing changelog if prompted' do
+      allow(subject).to receive(:yes?).with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?).and_return(false)
+      allow(subject).to receive(:yes?).with(Codelog::Message::Warning.delete_existing_changelog?).and_return(true)
+
+      expect(subject).to receive(:puts).with('== Deleting existing changelog ==')
+      expect(subject).to receive(:system).with('rm CHANGELOG.md')
+
+      subject.run
+    end
+  end
+
+  describe '#receive' do
+    it 'returns true when prompted y or Y' do
+      allow($stdin).to receive(:gets).and_return('y', 'Y')
+
+      expect(subject.send(:receive)).to eq true
+      expect(subject.send(:receive)).to eq true
+    end
+
+    it 'returns false when prompted n' do
+      allow($stdin).to receive(:gets).and_return('n')
+      expect(subject.send(:receive)).to eq false
     end
   end
 

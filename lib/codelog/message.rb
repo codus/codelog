@@ -10,6 +10,11 @@ module Codelog
           "#{prefix}: Please enter a version number"
         end
 
+        def invalid_date_format
+          "#{prefix}: Invalid date format. Check the input date format on:\n\n" \
+          'changelogs/codelog.yml'
+        end
+
         def already_existing_version(version)
           "#{prefix}: Could not create release #{version}. Release #{version} already exists"
         end
@@ -20,6 +25,24 @@ module Codelog
           "codelog new\n\n" \
           "Then describe your changes on the file generated at:\n\n" \
           'changelog/unreleased'
+        end
+      end
+    end
+
+    class Warning
+      class << self
+        def prefix
+          'WARNING'
+        end
+
+        def mantain_versioning_of_existing_changelog?
+          "#{prefix}: There is already a file named CHANGELOG.md within " \
+          'your project. Do you wish to mantain its versioning? (Y/N)'
+        end
+
+        def delete_existing_changelog?
+          "#{prefix}: When generating a release for the first " \
+          'time, CHANGELOG.md will be erased. Do you wish to erase it now? (Y/N)'
         end
       end
     end

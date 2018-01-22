@@ -1,10 +1,30 @@
 require 'spec_helper'
 
 describe Codelog::Command::Step::Version do
+  describe '#new' do
+    it 'aborts when date format differs than the provided one' do
+      expect_any_instance_of(described_class).to receive(:abort).with Codelog::Message::Error.invalid_date_format
+      described_class.new '1.2.4', '2012/12/12'
+    end
+  end
+
   describe '#run' do
     subject { described_class.new('1.2.3', '2012-12-12') }
 
     let(:mocked_release_file) { double(File) }
+
+    let(:mocked_config_file) do
+      {
+        header_text: "dummy_header",
+        default_changelog_filename: "CHANGELOG.md",
+        version_prefix: "",
+        version_suffix: "",
+        date_prefix: "",
+        show_date: true,
+        date_input_format: "%Y-%m-%d",
+        date_output_format: "%Y-%m-%d"
+      }
+    end
 
     before :each do
       allow(Dir).to receive(:"[]").with('changelogs/unreleased/*.yml') do
@@ -12,6 +32,7 @@ describe Codelog::Command::Step::Version do
       end
       allow(YAML).to receive(:load_file).with('file_1.yml') { { 'Category_1' => ['value_1'] } }
       allow(YAML).to receive(:load_file).with('file_2.yml') { { 'Category_1' => ['value_2'] } }
+      allow(YAML).to receive(:load_file).with('changelogs/codelog.yml').and_return(mocked_config_file)
     end
 
     context "within normal run" do
@@ -78,7 +99,7 @@ describe Codelog::Command::Step::Version do
           allow(Dir).to receive(:"[]").with('changelogs/unreleased/*.yml').and_return([])
         end
 
-        it 'throws the appropriate error message' do
+        it 'aborts with the appropriate error message' do
           expect(subject).to receive(:abort).with Codelog::Message::Error.no_detected_changes('1.2.3')
 
           subject.run

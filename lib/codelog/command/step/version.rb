@@ -13,7 +13,9 @@ module Codelog
 
         def initialize(version, release_date)
           @version = version
-          @release_date = Date.parse(release_date).to_s
+          @release_date = Date.strptime(release_date, Codelog::Config.date_input_format).to_s
+        rescue ArgumentError
+          abort(Codelog::Message::Error.invalid_date_format)
         end
 
         def self.run(version, release_date)
@@ -43,7 +45,7 @@ module Codelog
 
         def create_version_changelog_from(changes_hash)
           File.open("#{RELEASES_PATH}/#{@version}.md", 'a') do |line|
-            line.puts "## #{@version} - #{@release_date}"
+            line.puts "## #{Codelog::Config.version_tag(@version, @release_date)}"
             changes_hash.each do |category, changes|
               line.puts "### #{category}"
               changes.each { |change| line.puts "- #{change}" }

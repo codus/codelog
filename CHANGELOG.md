@@ -2,17 +2,7 @@
   All notable changes to this project will be documented in this file.
   The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
   and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
-            
-## 0.3.0 - 2018-01-18
-### Added
-- Datestamps along with version tag (synthax codelog release [x.y.z] <DATE>)
 
-### Changed
-- Insulated abort messages within Codelog::Messages
-- Blocked attempt to release a changelog with no changes
-- Blocked attempt to release repeated versions from a changelog
-
----
 ## 0.2.3
 ### Changed
 - Setup command now creates a .gitkeep file on /changelogs/releases folder
@@ -59,5 +49,3 @@
 - Automated Change file generator
 - Automated unreleased files deletion
 - Command to full Changelog generation flow
-
----
