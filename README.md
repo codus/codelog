@@ -5,7 +5,11 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/maintainability)](https://codeclimate.com/github/codus/codelog/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/test_coverage)](https://codeclimate.com/github/codus/codelog/test_coverage)
 
-This gem provides a simple way to manage changelogs, avoiding conflicts and missplaced informations. Changes are handled as if they were "migrations" and built when releasing a version, allowing a more precise knowledge of what changes were made to what version.
+A gem to help big teams to manage their chagelogs.
+
+When many people are developing changes to compose one product release, there can be some conflicts on merging the changes added to the Changelog. These conflicts can be badly resolved by git, which could cause lost of important release notes.
+
+This gem provides a simple way to manage changelogs, avoiding these conflicts and missplaced informations. Changes are handled as if they were "migrations" and built when releasing a version, allowing a more precise knowledge of what changes were made to what version.
 
 ## Installation
 
@@ -64,7 +68,7 @@ The template can be as the following example:
 
 ## Usage
 
-After the initial setup every time a change is made, the user should run the following command in the project root path:
+After the initial setup every time a change is made, the developer should run the following command in the project root path:
 
 ``` bash
 $ codelog new
@@ -74,17 +78,33 @@ This will generate a change file on `changelogs/unreleased/` from the `template.
 
 The new change file should be filled with informations about the implemented change, all unused topics should be erased and the file committed.
 
-When closing a version you should run the following command:
+Once all changes were merged and the release is ready to be packed, all that must be done is to run the following command:
 
 ``` bash
 $ codelog release {x.y.z}
 ```
+No conflicts to resolve. All changes documented.
 
 It will execute 3 steps:
 
 - Generate a new release file at `changelogs/releases/` by merging all change files at `changelogs/unreleased/`
 - Deletes the change files at `changelogs/unreleased/` because they now compose the new release. If it was not deleted, the change would appear repeated in the next release.
 - Updates the `CHANGELOG.md` file by merging all the releases at `changelogs/releases/`.
+
+## Configuring
+
+Since version 0.3.0, there are a few configurations that are possible. You can choose:
+- The name of the Changelog file.
+- The header of the Changelog file.
+- The format of the version and date on the releases.
+- Whether to show the release date or not.
+- The enter format for the release date.
+
+In case you were using version 0.2.0, you will have to run:
+
+```bash
+$ codelog setup
+```
 
 ## Contributing
 
