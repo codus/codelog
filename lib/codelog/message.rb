@@ -30,7 +30,7 @@ module Codelog
         def missing_config_file
           "#{prefix}: Could not find a config file.\n" \
           "Run the following command to create the missing file:\n\n" \
-          "codelog setup"
+          'codelog setup'
         end
       end
     end
