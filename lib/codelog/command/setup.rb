@@ -68,7 +68,7 @@ module Codelog
       end
 
       def system!(*args)
-        system(*args) || abort("\n== Command #{args} failed ==")
+        system(*args) || puts("\n== Command #{args} was skipped ==")
       end
 
       def yes?(args)
