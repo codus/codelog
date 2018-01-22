@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Codelog::Command::Step::Version do
   describe '#new' do
     it 'aborts when date format differs than the provided one' do
+      allow_any_instance_of(described_class).to receive(:config_file_exists?) { true }
       allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
       expect_any_instance_of(described_class).to receive(:abort).with Codelog::Message::Error.invalid_date_format
       described_class.new '1.2.4', '2012/12/12'
@@ -21,6 +22,7 @@ describe Codelog::Command::Step::Version do
       allow(YAML).to receive(:load_file).with('file_1.yml') { { 'Category_1' => ['value_1'] } }
       allow(YAML).to receive(:load_file).with('file_2.yml') { { 'Category_1' => ['value_2'] } }
       allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
+      allow_any_instance_of(described_class).to receive(:config_file_exists?) { true }
     end
 
     context "within normal run" do
@@ -62,7 +64,7 @@ describe Codelog::Command::Step::Version do
     context "within a failed run" do
       describe 'without a given version' do
         before :each do
-          allow(File).to receive(:file?).and_return(false)
+          allow(File).to receive(:file?).with('changelogs/releases/.md').and_return(false)
           allow(subject).to receive(:unreleased_changes?).and_return(true)
           allow(subject).to receive(:create_version_changelog_from)
           allow(Codelog::Config).to receive(:version_tag)
@@ -112,6 +114,8 @@ describe Codelog::Command::Step::Version do
 
   describe '.run' do
     it 'creates an instance of the class to run the command' do
+      allow_any_instance_of(described_class).to receive(:config_file_exists?) { true }
+      allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
       expect_any_instance_of(described_class).to receive(:run)
       described_class.run '1.2.3', '2012-12-12'
     end

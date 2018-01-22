@@ -10,8 +10,10 @@ module Codelog
 
         RELEASES_PATH = 'changelogs/releases'.freeze
         UNRELEASED_LOGS_PATH = 'changelogs/unreleased'.freeze
+        CONFIG_FILE_PATH = 'changelogs/codelog.yml'.freeze
 
         def initialize(version, release_date)
+          abort(Codelog::Message::Error.missing_config_file) unless config_file_exists?
           @version = version
           @release_date = Date.strptime(release_date, Codelog::Config.date_input_format).to_s
         rescue ArgumentError
@@ -61,6 +63,10 @@ module Codelog
 
         def unreleased_changes?
           Dir["#{UNRELEASED_LOGS_PATH}/*.yml"].any?
+        end
+
+        def config_file_exists?
+          File.file?(CONFIG_FILE_PATH)
         end
       end
     end

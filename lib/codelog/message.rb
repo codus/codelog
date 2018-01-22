@@ -26,6 +26,12 @@ module Codelog
           "Then describe your changes on the file generated at:\n\n" \
           'changelog/unreleased'
         end
+
+        def missing_config_file
+          "#{prefix}: Could not find a config file.\n" \
+          "Run the following command to create the missing file:\n\n" \
+          "codelog setup"
+        end
       end
     end
 

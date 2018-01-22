@@ -80,7 +80,7 @@ describe Codelog::Command::Setup do
       allow(File).to receive(:open).with(Codelog::Command::Setup::CHANGELOG_DESTINATION_PATH, 'wb')
         .and_yield(mocked_destination_file)
       subject.run
-      expect(mocked_destination_file).to have_received(:write).with "#-- Old changelog starts here --\n\n"
+      expect(mocked_destination_file).to have_received(:write).with "<!-- Old changelog starts here -->\n\n"
     end
 
     it 'prompts a message asking if the old file should be deleted' do

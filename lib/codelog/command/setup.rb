@@ -19,11 +19,11 @@ module Codelog
       def run
         chdir Dir.pwd do
           # This script provides the initial setup for the gem usage.
-          handle_existing_changelog
           puts '== Creating folder structure and template =='
           create_folder_structure
           puts '== Copying fixtures =='
           copy_fixtures
+          handle_existing_changelog
         end
       end
 
@@ -61,7 +61,7 @@ module Codelog
       def copy_and_mark_changelog
         File.open(CHANGELOG_DEFAULT_PATH, 'rb') do |orig|
           File.open(CHANGELOG_DESTINATION_PATH, 'wb') do |dest|
-            dest.write("#-- Old changelog starts here --\n\n")
+            dest.write("<!-- Old changelog starts here -->\n\n")
             dest.write(orig.read)
           end
         end
