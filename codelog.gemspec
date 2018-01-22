@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.executables   = ['codelog']
   spec.require_paths = ['lib']
   spec.post_install_message = 'To start using the codelog run `codelog setup` and fill the `template.yml` file'
+  spec.required_ruby_version = ">= 2.1.10"
 
   spec.add_runtime_dependency "thor", "~> 0.19"
 
