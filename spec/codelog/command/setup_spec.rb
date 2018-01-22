@@ -38,6 +38,9 @@ describe Codelog::Command::Setup do
   end
 
   describe '#handle_existing_changelog' do
+    let(:mocked_original_file) { double(File) }
+    let(:mocked_destination_file) { double(File) }
+
     before :each do
       allow(subject).to receive(:system) { true }
       stub_const('Codelog::Command::Setup::TEMPLATE_FILE_PATH', '/my/path')
@@ -65,6 +68,19 @@ describe Codelog::Command::Setup do
       expect(subject).to receive(:copy_and_mark_changelog)
 
       subject.run
+    end
+
+    it 'copies the old changelog and add a mark' do
+      allow(subject).to receive(:yes?).with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?).and_return(true)
+      allow(subject).to receive(:puts).with('== Copying existing changelog to releases folder ==')
+      allow(mocked_original_file).to receive(:read)
+      allow(mocked_destination_file).to receive(:write)
+      allow(File).to receive(:open).with(Codelog::Command::Setup::CHANGELOG_DEFAULT_PATH, 'rb')
+        .and_yield(mocked_original_file)
+      allow(File).to receive(:open).with(Codelog::Command::Setup::CHANGELOG_DESTINATION_PATH, 'wb')
+        .and_yield(mocked_destination_file)
+      subject.run
+      expect(mocked_destination_file).to have_received(:write).with "#-- Old changelog starts here --\n\n"
     end
 
     it 'prompts a message asking if the old file should be deleted' do
