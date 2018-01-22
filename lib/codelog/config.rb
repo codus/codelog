@@ -47,7 +47,7 @@ module Codelog
       end
 
       def show_date?
-        settings['show_date'] || true
+        settings['show_date']
       end
 
       def settings
