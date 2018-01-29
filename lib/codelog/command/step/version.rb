@@ -46,10 +46,13 @@ module Codelog
         end
 
         def create_version_changelog_from(changes_hash)
-          File.open("#{RELEASES_PATH}/#{@version}.md", 'a') do |line|
-            line.puts "## #{Codelog::Config.version_tag(@version, @release_date)}"
+          File.open("#{RELEASES_PATH}/#{@version}.yml", 'a') do |line|
+            line.puts "Version:"
+            line.puts "- #{Codelog::Config.version_tag(@version)}"
+            line.puts "Date:"
+            line.puts @release_date
             changes_hash.each do |category, changes|
-              line.puts "### #{category}"
+              line.puts "#{category}:"
               changes.each { |change| line.puts "- #{change}" }
               line.puts "\n"
             end

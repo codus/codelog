@@ -17,15 +17,8 @@ module Codelog
         settings['date_input_format'] || '%Y-%m-%d'
       end
 
-      def version_tag(version, release_date)
-        date_suffix =
-          if show_date?
-            parsed_date = Date.strptime(release_date, '%Y-%m-%d').strftime(date_output_format)
-            " - #{date_prefix}#{parsed_date}"
-          else
-            ''
-          end
-        "#{version_prefix}#{version}#{version_suffix}#{date_suffix}"
+      def version_tag(version)
+        "#{version_prefix}#{version}#{version_suffix}"
       end
 
       private
