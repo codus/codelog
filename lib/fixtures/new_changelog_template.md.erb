@@ -1,0 +1,28 @@
+# Changelog
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+<!-- all_logs = {
+  '0.3.0' => {
+    date: Time.now,
+    added: ['add1', 'add2'],
+    changes: ['change1', 'change2']
+  },
+  '0.2.1' => {
+    date: Time.now,
+    added: ['add1', 'add2'],
+    fixed: ['fix1']
+  }
+} -->
+
+
+
+<% all_logs.each do |version, version_logs| %>
+##<%= version - version_logs[:date] %>
+<% version_logs.dup.delete_if {|k| k == :date}.each do |category, content| %>
+### <%= category %>
+<% content.each do |item|%>
+- <%= item %>
+<% end %>
+<% end %>
+<% end %>
