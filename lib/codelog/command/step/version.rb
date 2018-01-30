@@ -47,23 +47,17 @@ module Codelog
 
         def create_version_changelog_from(changes_hash)
           File.open("#{RELEASES_PATH}/#{@version}.yml", 'a') do |line|
-            line.puts "Version:"
-            line.puts " #{Codelog::Config.version_tag(@version)}"
-            line.puts "\n"
-            line.puts "Date:"
-            line.puts " #{@release_date}"
-            line.puts "\n"
+            line.puts "Version:\n #{Codelog::Config.version_tag(@version)}\n\n"
+            line.puts "Date:\n #{@release_date}\n\n"
             changes_hash.each do |category, changes|
               line.puts "#{category}:"
-              changes.each { |change| line.puts "- #{change}" }
-              line.puts "\n"
+              changes.each { |change| line.puts "- #{change}\n\n" }
             end
-            line.puts "---\n"
           end
         end
 
         def version_exists?
-          File.file?("#{RELEASES_PATH}/#{@version}.md")
+          File.file?("#{RELEASES_PATH}/#{@version}.yml")
         end
 
         def unreleased_changes?
