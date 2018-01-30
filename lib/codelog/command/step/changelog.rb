@@ -1,4 +1,7 @@
 require 'fileutils'
+require 'yaml'
+require 'ostruct'
+require 'erb'
 
 module Codelog
   module Command
@@ -19,22 +22,32 @@ module Codelog
         private
 
         def changes
-          version_changelogs = Dir['changelogs/releases/*.md']
-          version_changelogs.sort_by! do |file_name|
+          releases_files_paths = Dir['changelogs/releases/*.yml']
+          releases_files_paths.sort_by! do |file_name|
             version_number = file_name.split('/').last.chomp('.md')
             Gem::Version.new(version_number)
           end.reverse!
-          version_changelogs.inject([]) do |partial_changes, version_changelog|
-            partial_changes + File.readlines(version_changelog)
+          partial_changes = []
+          releases_files_paths.each do |version_changelog|
+            partial_changes << (YAML.load_file(version_changelog))
           end
+          partial_changes
         end
 
+
+
         def create_file_from(changes)
-          File.open(Codelog::Config.filename, 'w+') do |f|
-            f.puts '# Changelog'
-            f.puts Codelog::Config.header
-            f.puts(changes)
-          end
+          a = ERB.new("<% changes.each do |version_data| %>
+          Versão: <%= version_data['Version'] %>
+          Data <%= version_data['Date'].strftime('%d/%m/%Y') %>
+          <% version_data.dup.delete_if {|key| key == 'Version' || key == 'Date'}.each do |category, content| %>
+          <%= category %>
+          <% content.each do |item|%>
+          - <%= item %>
+          <% end %>
+          <% end %>
+          <% end %>").result binding
+          puts a
         end
       end
     end
