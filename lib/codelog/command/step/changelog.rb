@@ -8,7 +8,7 @@ module Codelog
       class Changelog
         include FileUtils
 
-        ERB_TEMPLATE_PATH = 'changelogs/changelog_template.md.erb'.freeze
+        CHANGELOG_TEMPLATE_PATH = 'changelogs/changelog_template.md.erb'.freeze
 
         def self.run
           Codelog::Command::Step::Changelog.new.run
@@ -36,7 +36,7 @@ module Codelog
         end
 
         def create_file_from(changes)
-          template = File.read(ERB_TEMPLATE_PATH)
+          template = File.read(CHANGELOG_TEMPLATE_PATH)
           final_changelog = ERB.new(template).result binding
           File.open(Codelog::Config.filename, 'w+') do |f|
             f.puts(final_changelog)
