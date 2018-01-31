@@ -14,7 +14,8 @@ module Codelog
     end
 
     desc 'release [VERSION] <RELEASE_DATE>', 'Generate new release updating changelog'
-    def release(version_number, release_date = Date.today.to_s)
+    def release(version_number, release_date =
+                Date.today.strftime(Codelog::Config.date_input_format))
       Codelog::Command::Release.run version_number, release_date
     end
   end
