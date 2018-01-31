@@ -25,7 +25,7 @@ module Codelog
         def changes
           releases_files_paths = Dir['changelogs/releases/*.yml']
           releases_files_paths.sort_by! do |file_name|
-            version_number = file_name.split('/').last.chomp('.md')
+            version_number = file_name.split('/').last.chomp('.yml')
             Gem::Version.new(version_number)
           end.reverse!
           partial_changes = []
