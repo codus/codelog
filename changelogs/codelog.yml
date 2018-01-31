@@ -1,6 +1,5 @@
 # Changelog Header  -------------------------------------------------
 
-header_textfile: changelogs/header.txt
 default_changelog_filename: CHANGELOG.md
 
 # Tag formatting  ---------------------------------------------------

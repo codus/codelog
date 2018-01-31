@@ -9,10 +9,6 @@ module Codelog
         settings['default_changelog_filename'] || 'CHANGELOG.md'
       end
 
-      def header
-        File.open(settings['header_textfile'], 'r').read || ''
-      end
-
       def date_input_format
         settings['date_input_format'] || '%Y-%m-%d'
       end

@@ -7,7 +7,6 @@ module Codelog
 
       TEMPLATE_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/template.yml')
       CONFIG_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/codelog.yml')
-      HEADER_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/header.txt')
       NEW_TEMPLATE_FILE = File.dirname(__FILE__).concat('/../../fixtures/new_template.md.erb')
 
       CHANGELOG_DEFAULT_PATH = 'CHANGELOG.md'.freeze
@@ -41,7 +40,6 @@ module Codelog
       def copy_fixtures
         system! "cp #{TEMPLATE_FILE_PATH} changelogs/template.yml"
         system! "cp #{CONFIG_FILE_PATH} changelogs/codelog.yml"
-        system! "cp #{HEADER_FILE_PATH} changelogs/header.txt"
         system! "cp #{NEW_TEMPLATE_FILE} changelogs/new_template.md.erb"
       end
 
