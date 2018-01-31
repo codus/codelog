@@ -16,7 +16,7 @@ module Codelog
 
         def run
           chdir Dir.pwd do
-            create_file_from changes
+            create_file
           end
         end
 
@@ -28,14 +28,12 @@ module Codelog
             version_number = file_name.split('/').last.chomp('.yml')
             Gem::Version.new(version_number)
           end.reverse!
-          partial_changes = []
-          releases_files_paths.each do |version_changelog|
-            partial_changes << YAML.load_file(version_changelog)
+          partial_changes = releases_files_paths.map do |version_changelog|
+            YAML.load_file(version_changelog)
           end
-          partial_changes
         end
 
-        def create_file_from(changes)
+        def create_file
           template = File.read(CHANGELOG_TEMPLATE_PATH)
           final_changelog = ERB.new(template).result binding
           File.open(Codelog::Config.filename, 'w+') do |f|
