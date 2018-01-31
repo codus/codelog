@@ -1,21 +1,24 @@
 require 'spec_helper'
+require 'date'
+require 'yaml'
 
 describe Codelog::Command::Step::Changelog do
+  let!(:changelog_template) { File.read('lib/fixtures/changelog_template.md.erb') }
+  let!(:codelog_file) { YAML.load_file('lib/fixtures/codelog.yml') }
   let(:mocked_changelog) { double(File) }
-  let(:mocked_header_textfile) { double(File, read: 'stubbed read') }
+  let(:stubed_date) { Date.strptime('2018-02-15') }
 
   describe '#run' do
     before :each do
-      allow(Dir).to receive(:'[]').with('changelogs/releases/*.md') { ['0.1.0.md', '0.2.0.md'] }
-      allow(File).to receive(:readlines).with('0.1.0.md') { ['line_1\n'] }
-      allow(File).to receive(:readlines).with('0.2.0.md') { ['line_2\n'] }
-      allow(File).to receive(:open).with('textfile.txt', 'r').and_return(mocked_header_textfile)
-      allow(YAML).to receive(:load_file).with('changelogs/codelog.yml') { { 'header_textfile' => 'textfile.txt' } }
+      allow(File).to receive(:read).with('changelogs/changelog_template.md.erb') { changelog_template }
+      allow(Dir).to receive(:'[]').with('changelogs/releases/*.yml') { ['0.1.0.yml', '0.2.0.yml'] }
+      allow(YAML).to receive(:load_file).with('changelogs/codelog.yml') { codelog_file }
+      allow(YAML).to receive(:load_file).with('0.1.0.yml') { { 'Version' => '0.1.0', 'Date' => stubed_date } }
+      allow(YAML).to receive(:load_file).with('0.2.0.yml') { { 'Version' => '0.2.0', 'Date' => stubed_date } }
     end
 
-    it 'combines the content of the releases and put in an array' do
-      expect(subject).to receive(:create_file_from)
-        .with(['line_2\n', 'line_1\n'])
+    it 'creates CHANGELOG file' do
+      expect(subject).to receive(:create_file)
       subject.run
     end
 
@@ -23,7 +26,9 @@ describe Codelog::Command::Step::Changelog do
       allow(mocked_changelog).to receive(:puts)
       expect(File).to receive(:open).with('CHANGELOG.md', 'w+').and_yield mocked_changelog
       subject.run
-      expect(mocked_changelog).to have_received(:puts).with(['line_2\n', 'line_1\n'])
+      expect(mocked_changelog).to have_file_content('## 0.1.0')
+      expect(mocked_changelog).to have_file_content('## 0.2.0')
+      expect(mocked_changelog).to have_file_content('### 2018-02-15')
     end
   end
 

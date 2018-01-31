@@ -16,7 +16,7 @@ describe Codelog::Command::New do
 
     it 'creates a file for the unreleased partial changes' do
       expect(subject).to have_received(:system)
-        .with('cp changelogs/template.yml changelogs/unreleased/20180119134323984_change.yml')
+        .with('cp changelogs/release_template.yml changelogs/unreleased/20180119134323984_change.yml')
     end
   end
 

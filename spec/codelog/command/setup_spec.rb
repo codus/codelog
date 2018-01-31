@@ -4,7 +4,7 @@ describe Codelog::Command::Setup do
   describe '#run' do
     before :each do
       allow(subject).to receive(:system) { true }
-      stub_const('Codelog::Command::Setup::TEMPLATE_FILE_PATH', '/my/path')
+      stub_const('Codelog::Command::Setup::RELEASE_TEMPLATE_FILE_PATH', '/my/path')
       stub_const('Codelog::Command::Setup::CONFIG_FILE_PATH', '/my/config_path')
       allow(subject).to receive(:puts).with('== Creating folder structure and template ==')
       allow(subject).to receive(:puts).with('== Copying fixtures ==')
@@ -25,7 +25,7 @@ describe Codelog::Command::Setup do
     end
 
     it 'copy the template fixture file to the changelogs folder' do
-      expect(subject).to have_received(:system).with('cp /my/path changelogs/template.yml')
+      expect(subject).to have_received(:system).with('cp /my/path changelogs/release_template.yml')
     end
 
     it 'creates a .gitkeep file on the unreleased folder' do
@@ -43,7 +43,7 @@ describe Codelog::Command::Setup do
 
     before :each do
       allow(subject).to receive(:system) { true }
-      stub_const('Codelog::Command::Setup::TEMPLATE_FILE_PATH', '/my/path')
+      stub_const('Codelog::Command::Setup::RELEASE_TEMPLATE_FILE_PATH', '/my/path')
       stub_const('Codelog::Command::Setup::CONFIG_FILE_PATH', '/my/config_path')
 
       allow(subject).to receive(:puts).with('== Creating folder structure and template ==')
