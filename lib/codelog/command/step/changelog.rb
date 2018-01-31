@@ -1,6 +1,5 @@
 require 'fileutils'
 require 'yaml'
-require 'ostruct'
 require 'erb'
 
 module Codelog
@@ -39,7 +38,6 @@ module Codelog
         def create_file_from(changes)
           template = File.read(ERB_TEMPLATE_PATH)
           final_changelog = ERB.new(template).result binding
-          # Removes spaces from the start of all lines
           File.open(Codelog::Config.filename, 'w+') do |f|
             f.puts(final_changelog)
           end
