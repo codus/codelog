@@ -1,5 +1,6 @@
 require 'thor'
 require 'date'
+require 'yaml'
 
 module Codelog
   class CLI < Thor
