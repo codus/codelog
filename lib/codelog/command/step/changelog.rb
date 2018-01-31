@@ -9,6 +9,8 @@ module Codelog
       class Changelog
         include FileUtils
 
+        ERB_TEMPLATE_PATH = 'changelogs/new_template.md.erb'.freeze
+
         def self.run
           Codelog::Command::Step::Changelog.new.run
         end
@@ -29,25 +31,19 @@ module Codelog
           end.reverse!
           partial_changes = []
           releases_files_paths.each do |version_changelog|
-            partial_changes << (YAML.load_file(version_changelog))
+            partial_changes << YAML.load_file(version_changelog)
           end
           partial_changes
         end
 
-
-
         def create_file_from(changes)
-          a = ERB.new("<% changes.each do |version_data| %>
-          Versão: <%= version_data['Version'] %>
-          Data <%= version_data['Date'].strftime('%d/%m/%Y') %>
-          <% version_data.dup.delete_if {|key| key == 'Version' || key == 'Date'}.each do |category, content| %>
-          <%= category %>
-          <% content.each do |item|%>
-          - <%= item %>
-          <% end %>
-          <% end %>
-          <% end %>").result binding
-          puts a
+          template = File.read(ERB_TEMPLATE_PATH)
+          final_changelog = ERB.new(template).result binding
+          # Removes spaces from the start of all lines
+          File.open(Codelog::Config.filename, 'w+') do |f|
+            f.puts(final_changelog)
+          end
+
         end
       end
     end
