@@ -10,6 +10,5 @@ date_prefix: ""
 
 # Date formatting  --------------------------------------------------
 
-show_date: false
 date_input_format: "%Y-%m-%d"
 date_output_format: "%Y-%m-%d"

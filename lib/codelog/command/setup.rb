@@ -5,9 +5,11 @@ module Codelog
     class Setup
       include FileUtils
 
-      TEMPLATE_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/template.yml')
+      RELEASE_TEMPLATE_FILE_PATH = File.dirname(__FILE__)
+                                       .concat('/../../fixtures/release_template.yml')
       CONFIG_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/codelog.yml')
-      NEW_TEMPLATE_FILE = File.dirname(__FILE__).concat('/../../fixtures/new_template.md.erb')
+      CHANGELOG_TEMPLATE_FILE_PATH = File.dirname(__FILE__)
+                                         .concat('/../../fixtures/changelog_template.md.erb')
 
       CHANGELOG_DEFAULT_PATH = 'CHANGELOG.md'.freeze
       CHANGELOG_DESTINATION_PATH = 'changelogs/releases/0.0.0.md'.freeze
@@ -38,9 +40,9 @@ module Codelog
       end
 
       def copy_fixtures
-        system! "cp #{TEMPLATE_FILE_PATH} changelogs/template.yml"
+        system! "cp #{RELEASE_TEMPLATE_FILE_PATH} changelogs/release_template.yml"
         system! "cp #{CONFIG_FILE_PATH} changelogs/codelog.yml"
-        system! "cp #{NEW_TEMPLATE_FILE} changelogs/new_template.md.erb"
+        system! "cp #{CHANGELOG_TEMPLATE_FILE_PATH} changelogs/changelog_template.md.erb"
       end
 
       def handle_existing_changelog

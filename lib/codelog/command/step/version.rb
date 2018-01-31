@@ -51,7 +51,8 @@ module Codelog
             line.puts "Date:\n #{@release_date}\n\n"
             changes_hash.each do |category, changes|
               line.puts "#{category}:"
-              changes.each { |change| line.puts "- #{change}\n\n" }
+              changes.each { |change| line.puts "- #{change}" }
+              line.puts "\n"
             end
           end
         end

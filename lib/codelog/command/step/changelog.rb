@@ -9,7 +9,7 @@ module Codelog
       class Changelog
         include FileUtils
 
-        ERB_TEMPLATE_PATH = 'changelogs/new_template.md.erb'.freeze
+        ERB_TEMPLATE_PATH = 'changelogs/changelog_template.md.erb'.freeze
 
         def self.run
           Codelog::Command::Step::Changelog.new.run
@@ -43,7 +43,6 @@ module Codelog
           File.open(Codelog::Config.filename, 'w+') do |f|
             f.puts(final_changelog)
           end
-
         end
       end
     end

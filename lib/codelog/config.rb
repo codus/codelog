@@ -35,10 +35,6 @@ module Codelog
         settings['date_prefix'] || ''
       end
 
-      def show_date?
-        settings['show_date']
-      end
-
       def settings
         @settings ||= YAML.load_file(CONFIG_FILE_PATH)
       end

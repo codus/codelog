@@ -7,7 +7,6 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 ### <%= version_data["Date"].strftime("%d/%m/%Y") %>
 <% version_data.dup.delete_if {|key| key == "Version" || key == "Date"}.each do |category, content| %>
 ### <%= category %> <% content.each do |item|%>
-- <%= item %>
-<% end %><% end %>
+- <%= item %><% end %><% end %>
 ---
 <% end %>
