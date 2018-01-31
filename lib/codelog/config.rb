@@ -31,10 +31,6 @@ module Codelog
         settings['version_suffix'] || ''
       end
 
-      def date_prefix
-        settings['date_prefix'] || ''
-      end
-
       def settings
         @settings ||= YAML.load_file(CONFIG_FILE_PATH)
       end

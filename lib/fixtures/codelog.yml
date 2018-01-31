@@ -6,7 +6,6 @@ default_changelog_filename: CHANGELOG.md
 
 version_prefix: ""
 version_suffix: ""
-date_prefix: ""
 
 # Date formatting  --------------------------------------------------
 
