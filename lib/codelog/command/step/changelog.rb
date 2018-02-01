@@ -28,7 +28,7 @@ module Codelog
             version_number = file_name.split('/').last.chomp('.yml')
             Gem::Version.new(version_number)
           end.reverse!
-          partial_changes = releases_files_paths.map do |version_changelog|
+          releases_files_paths.map do |version_changelog|
             YAML.load_file(version_changelog)
           end
         end
