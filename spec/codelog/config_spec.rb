@@ -25,7 +25,7 @@ describe Codelog::Config do
   end
 
   describe '#version_tag' do
-    it 'returns a correctly formatted version tag with date' do
+    it 'returns a correctly formatted version tag' do
       expect(described_class.version_tag('1.2.3'))
         .to eq('[my_version_prefix]1.2.3[my_version_suffix]')
     end
