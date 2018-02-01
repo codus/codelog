@@ -1,0 +1,15 @@
+"Added":
+  - ERB changelog template file
+
+"Changed":
+  - template.yml name to release_template.yml
+  - Releases are now .yml files
+  - Releases will have Date format base on date_input_format from codelog.yml
+
+"Removed":
+  - codelog.yml unecessary variables
+  - All relations with header file
+
+"Deploy notes":
+  - When updating the gem, a new setup will be required. It's advised to back-up the current CHANGELOG.md, because it will be deleted on the next release.
+  - From now on, all .md files from releases will be ignored when creating CHANGELOG.md.
