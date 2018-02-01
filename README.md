@@ -33,13 +33,13 @@ $ gem install codelog
 
 ## Setup
 
-After the installation run the following command to generate the `changelogs` folder structure and the `template.yml` file:
+After the installation run the following command to generate the `changelogs` folder structure and the `release_template.yml` and `changelog_template.md.erb` files:
 
 ``` bash
 $ codelog setup
 ```
 
-The `template.yml` file will be used to create a new change file. Change files from `unreleased` folder will compose the next release file when generated.
+The `release_template.yml` file will be used to create a new change file. Change files from `unreleased` folder will compose the next release file when generated.
 You should populate this template with the sections and topic examples desired for describe the current release that will be later added in the `CHANGELOG.md` file.
 The template can be as the following example:
 
@@ -66,6 +66,23 @@ The template can be as the following example:
   - Changes that should impact the deploy process and what should be made before it
 ```
 
+The `changelog_template.md.erb` file will be used to create/update your `CHANGELOG.MD` file.
+You can change this file structure to your desired `CHANGELOG.MD` model atany time. The defaul template uses this structure:
+
+```
+# Title
+
+Header
+
+<% changes.each do |version_data| %>
+## <%= version_data["Version"] %> - <%= version_data["Date"].strftime("%d/%m/%Y") %>
+<% version_data.dup.delete_if {|key| key == "Version" || key == "Date"}.each do |category, content| %>
+### <%= category %> <% content.each do |item|%>
+- <%= item %><% end %><% end %>
+---
+<% end %>
+```
+
 ## Usage
 
 After the initial setup every time a change is made, the developer should run the following command in the project root path:
@@ -74,7 +91,7 @@ After the initial setup every time a change is made, the developer should run th
 $ codelog new
 ```
 
-This will generate a change file on `changelogs/unreleased/` from the `template.yml` named with a timestamp value followed by `_change.yml`.
+This will generate a change file on `changelogs/unreleased/` from the `release_template.yml` named with a timestamp value followed by `_change.yml`.
 
 The new change file should be filled with informations about the implemented change, all unused topics should be erased and the file committed.
 
@@ -89,7 +106,7 @@ It will execute 3 steps:
 
 - Generate a new release file at `changelogs/releases/` by merging all change files at `changelogs/unreleased/`
 - Deletes the change files at `changelogs/unreleased/` because they now compose the new release. If it was not deleted, the change would appear repeated in the next release.
-- Updates the `CHANGELOG.md` file by merging all the releases at `changelogs/releases/`.
+- Updates the `CHANGELOG.md` file, based on `changelog_template.md.erb`, by merging all the releases at `changelogs/releases/`.
 
 ## Configuring
 
