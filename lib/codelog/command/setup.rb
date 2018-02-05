@@ -46,10 +46,9 @@ module Codelog
       end
 
       def handle_existing_changelog
-        if old_changelog_exists?
-          puts '== Copying existing changelog to releases folder =='
-          copy_and_mark_changelog
-        end
+        return unless old_changelog_exists?
+        puts '== Copying existing changelog to releases folder =='
+        copy_and_mark_changelog
       end
 
       def old_changelog_exists?
