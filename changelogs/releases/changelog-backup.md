@@ -1,30 +1,5 @@
 <!-- Old changelog starts here -->
 
-# Title
-
-Header 
-
-
-## 0.3.1 - 05/02/2018
-
-### Fixed 
-- Non-default input date fomat
-### Added 
-- ERB changelog template file
-### Changed 
-- template.yml name to release_template.yml
-- Releases are now .yml files
-- Releases will have Date format base on date_input_format from codelog.yml
-### Removed 
-- codelog.yml unecessary variables
-- All relations with header file
-### Deploy notes 
-- When updating the gem, a new setup will be required. It's advised to back-up the current CHANGELOG.md, because it will be deleted on the next release.
-- From now on, all .md files from releases will be ignored when creating CHANGELOG.md.
----
-
-<!-- Old changelog starts here -->
-
 # Changelog
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
