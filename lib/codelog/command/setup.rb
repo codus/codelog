@@ -47,7 +47,7 @@ module Codelog
 
       def handle_existing_changelog
         return unless old_changelog_exists?
-        puts '== Copying existing changelog to releases folder =='
+        delete_md_releases
         copy_and_mark_changelog
       end
 
@@ -55,7 +55,14 @@ module Codelog
         File.file?(CHANGELOG_DEFAULT_PATH)
       end
 
+      def delete_md_releases
+        return unless Dir['changelogs/releases/*.md'].any?
+        puts '== Deleting .md releases =='
+        system! 'rm changelogs/releases/*.md'
+      end
+
       def copy_and_mark_changelog
+        puts '== Copying existing changelog to releases folder =='
         File.open(CHANGELOG_DEFAULT_PATH, 'rb') do |orig|
           File.open(CHANGELOG_DESTINATION_PATH, 'wb') do |dest|
             dest.write("<!-- Old changelog starts here -->\n\n")
@@ -66,15 +73,6 @@ module Codelog
 
       def system!(*args)
         system(*args) || puts("\n== Command #{args} was skipped ==")
-      end
-
-      def yes?(args)
-        puts(args)
-        receive
-      end
-
-      def receive(stdin: $stdin)
-        stdin.gets.chomp.casecmp('y').zero?
       end
     end
   end
