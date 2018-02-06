@@ -11,7 +11,6 @@ describe Codelog::Presenters::VersionDataPresenter do
     expect(subject.version).to eq '0.1.0'
   end
   it '#modifications' do
-    pending()
     expect(subject.modifications).to eq({ 'Added' => ["modifications1" , "modification2"] })
   end
 end
