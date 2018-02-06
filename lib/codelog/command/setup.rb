@@ -56,6 +56,7 @@ module Codelog
       end
 
       def delete_md_releases
+        return unless Dir['changelogs/releases/*.md'].any?
         puts '== Deleting .md releases =='
         system! 'rm changelogs/releases/*.md'
       end
