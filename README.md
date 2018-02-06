@@ -69,7 +69,7 @@ The template can be as the following example:
 The `changelog_template.md.erb` file will be used to create/update your `CHANGELOG.MD` file.
 You can change this file structure to your desired `CHANGELOG.MD` model at any time. The default template uses this structure:
 
-```
+```erb
 # Title
 
 Header
