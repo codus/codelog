@@ -35,6 +35,7 @@ module Codelog
 
         def create_file
           template = File.read(CHANGELOG_TEMPLATE_PATH)
+          # binding will provide changes to the template
           final_changelog = ERB.new(template).result binding
           File.open(Codelog::Config.filename, 'w+') do |f|
             f.puts(final_changelog)
