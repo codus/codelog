@@ -45,7 +45,7 @@ module Codelog
 
         def changelog_backup_if_exists
           return unless File.file?(CHANGELOG_BACKUP_PATH)
-          backup_content = File.readlines(CHANGELOG_BACKUP_PATH)
+          File.readlines(CHANGELOG_BACKUP_PATH)
         end
       end
     end
