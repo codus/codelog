@@ -67,15 +67,6 @@ module Codelog
       def system!(*args)
         system(*args) || puts("\n== Command #{args} was skipped ==")
       end
-
-      def yes?(args)
-        puts(args)
-        receive
-      end
-
-      def receive(stdin: $stdin)
-        stdin.gets.chomp.casecmp('y').zero?
-      end
     end
   end
 end
