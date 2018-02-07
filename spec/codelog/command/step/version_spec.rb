@@ -30,7 +30,7 @@ describe Codelog::Command::Step::Version do
         allow(File).to receive(:file?).and_return(false)
         allow(subject).to receive(:unreleased_changes?).and_return(true)
         allow(Codelog::Config).to receive(:version_tag)
-          .with('1.2.3', '2012-12-12') { '1.2.3 2012-12-12' }
+          .with('1.2.3') { '1.2.3' }
       end
 
       it 'merges the content of the files with the same category' do
@@ -41,11 +41,11 @@ describe Codelog::Command::Step::Version do
 
       it 'creates a release using the unreleased changes' do
         allow(mocked_release_file).to receive(:puts)
-        allow(File).to receive(:open).with('changelogs/releases/1.2.3.md', 'a')
+        allow(File).to receive(:open).with('changelogs/releases/1.2.3.yml', 'a')
                                      .and_yield(mocked_release_file)
         subject.run
-        expect(mocked_release_file).to have_received(:puts).with '## 1.2.3 2012-12-12'
-        expect(mocked_release_file).to have_received(:puts).with '### Category_1'
+        expect(mocked_release_file).to have_received(:puts).with "Version:\n 1.2.3\n\n"
+        expect(mocked_release_file).to have_received(:puts).with 'Category_1:'
       end
 
       it 'checks the existence of an already existing version of the release' do
@@ -64,18 +64,17 @@ describe Codelog::Command::Step::Version do
     context "within a failed run" do
       describe 'without a given version' do
         before :each do
-          allow(File).to receive(:file?).with('changelogs/releases/.md').and_return(false)
+          allow(File).to receive(:file?).with('changelogs/releases/.yml').and_return(false)
           allow(subject).to receive(:unreleased_changes?).and_return(true)
           allow(subject).to receive(:create_version_changelog_from)
           allow(Codelog::Config).to receive(:version_tag)
-            .with(nil, '2012-12-12')
+            .with(nil)
         end
 
         subject { described_class.new(nil, '2012-12-12') }
 
         it 'aborts with the appropriate error message' do
           expect(subject).to receive(:abort).with Codelog::Message::Error.missing_version_number
-
           subject.run
         end
       end
@@ -85,7 +84,7 @@ describe Codelog::Command::Step::Version do
           allow(subject).to receive(:version_exists?).and_return(true)
           allow(subject).to receive(:create_version_changelog_from)
           allow(Codelog::Config).to receive(:version_tag)
-            .with('1.2.3', '2012-12-12')
+            .with('1.2.3')
         end
 
         it 'aborts with the appropriate error message' do
@@ -100,12 +99,11 @@ describe Codelog::Command::Step::Version do
           allow(subject).to receive(:create_version_changelog_from)
           allow(Dir).to receive(:"[]").with('changelogs/unreleased/*.yml').and_return([])
           allow(Codelog::Config).to receive(:version_tag)
-            .with('1.2.3', '2012-12-12')
+            .with('1.2.3')
         end
 
         it 'aborts with the appropriate error message' do
           expect(subject).to receive(:abort).with Codelog::Message::Error.no_detected_changes('1.2.3')
-
           subject.run
         end
       end

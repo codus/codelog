@@ -5,12 +5,14 @@ module Codelog
     class Setup
       include FileUtils
 
-      TEMPLATE_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/template.yml')
+      RELEASE_TEMPLATE_FILE_PATH = File.dirname(__FILE__)
+                                       .concat('/../../fixtures/release_template.yml')
       CONFIG_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/codelog.yml')
-      HEADER_FILE_PATH = File.dirname(__FILE__).concat('/../../fixtures/header.txt')
+      CHANGELOG_TEMPLATE_FILE_PATH = File.dirname(__FILE__)
+                                         .concat('/../../fixtures/changelog_template.md.erb')
 
       CHANGELOG_DEFAULT_PATH = 'CHANGELOG.md'.freeze
-      CHANGELOG_DESTINATION_PATH = 'changelogs/releases/0.0.0.md'.freeze
+      CHANGELOG_DESTINATION_PATH = 'changelogs/releases/changelog-backup.md'.freeze
 
       def self.run
         Codelog::Command::Setup.new.run
@@ -38,27 +40,29 @@ module Codelog
       end
 
       def copy_fixtures
-        system! "cp #{TEMPLATE_FILE_PATH} changelogs/template.yml"
+        system! "cp #{RELEASE_TEMPLATE_FILE_PATH} changelogs/release_template.yml"
         system! "cp #{CONFIG_FILE_PATH} changelogs/codelog.yml"
-        system! "cp #{HEADER_FILE_PATH} changelogs/header.txt"
+        system! "cp #{CHANGELOG_TEMPLATE_FILE_PATH} changelogs/changelog_template.md.erb"
       end
 
       def handle_existing_changelog
         return unless old_changelog_exists?
-        if yes? Codelog::Message::Warning.mantain_versioning_of_existing_changelog?
-          puts '== Copying existing changelog to releases folder =='
-          copy_and_mark_changelog
-        elsif yes? Codelog::Message::Warning.delete_existing_changelog?
-          puts '== Deleting existing changelog =='
-          system! "rm #{CHANGELOG_DEFAULT_PATH}"
-        end
+        delete_md_releases
+        copy_and_mark_changelog
       end
 
       def old_changelog_exists?
         File.file?(CHANGELOG_DEFAULT_PATH)
       end
 
+      def delete_md_releases
+        return unless Dir['changelogs/releases/*.md'].any?
+        puts '== Deleting .md releases =='
+        system! 'rm changelogs/releases/*.md'
+      end
+
       def copy_and_mark_changelog
+        puts '== Copying existing changelog to releases folder =='
         File.open(CHANGELOG_DEFAULT_PATH, 'rb') do |orig|
           File.open(CHANGELOG_DESTINATION_PATH, 'wb') do |dest|
             dest.write("<!-- Old changelog starts here -->\n\n")
@@ -69,15 +73,6 @@ module Codelog
 
       def system!(*args)
         system(*args) || puts("\n== Command #{args} was skipped ==")
-      end
-
-      def yes?(args)
-        puts(args)
-        receive
-      end
-
-      def receive(stdin: $stdin)
-        stdin.gets.chomp.casecmp('y').zero?
       end
     end
   end

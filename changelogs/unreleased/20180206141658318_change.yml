@@ -1,0 +1,5 @@
+"Added":
+  - VersionDatePresenter class to promote uncouple.
+
+"Changed":
+  - ERB changelog template file will use the VersionDatePresenter methods.

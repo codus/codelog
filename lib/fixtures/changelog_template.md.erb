@@ -1,0 +1,11 @@
+# Title
+
+Header
+
+<% changes.each do |change| %>
+## <%= change.version %> - <%= change.date %>
+<% change.modifications.each do |category, content| %>
+### <%= category %> <% content.each do |item|%>
+- <%= item %><% end %><% end %>
+---
+<% end %>
