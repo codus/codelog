@@ -17,11 +17,11 @@ module Codelog
         "#{version_prefix}#{version}#{version_suffix}"
       end
 
-      private
-
       def date_output_format
         settings['date_output_format'] || '%Y-%m-%d'
       end
+
+      private
 
       def version_prefix
         settings['version_prefix'] || ''

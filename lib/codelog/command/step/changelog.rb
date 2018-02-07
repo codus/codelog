@@ -29,7 +29,7 @@ module Codelog
             Gem::Version.new(version_number)
           end.reverse!
           releases_files_paths.map do |version_changelog|
-            YAML.load_file(version_changelog)
+            Codelog::Presenter::VersionDataPresenter.new(YAML.load_file(version_changelog))
           end
         end
 

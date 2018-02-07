@@ -1,10 +1,10 @@
 # Title
 
-Header 
+Header
 
-<% changes.each do |version_data| %>
-## <%= version_data["Version"] %> - <%= version_data["Date"].strftime("%d/%m/%Y") %>
-<% version_data.dup.delete_if {|key| key == "Version" || key == "Date"}.each do |category, content| %>
+<% changes.each do |change| %>
+## <%= change.version %> - <%= change.date %>
+<% change.modifications.each do |category, content| %>
 ### <%= category %> <% content.each do |item|%>
 - <%= item %><% end %><% end %>
 ---

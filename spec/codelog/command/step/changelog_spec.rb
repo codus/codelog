@@ -7,6 +7,8 @@ describe Codelog::Command::Step::Changelog do
   let!(:codelog_file) { YAML.load_file('lib/fixtures/codelog.yml') }
   let(:mocked_changelog) { double(File) }
   let(:stubed_date) { Date.strptime('2018-02-15') }
+  let(:stub_presenter) {double(Codelog::Presenter::VersionDataPresenter , date: stubed_date , version: "0.1.0" , modifications: {}) }
+  let(:stub_presenter_second) {double(Codelog::Presenter::VersionDataPresenter , date: stubed_date , version: "0.2.0" , modifications: {})}
 
   describe '#run' do
     before :each do
@@ -15,6 +17,8 @@ describe Codelog::Command::Step::Changelog do
       allow(YAML).to receive(:load_file).with('changelogs/codelog.yml') { codelog_file }
       allow(YAML).to receive(:load_file).with('0.1.0.yml') { { 'Version' => '0.1.0', 'Date' => stubed_date } }
       allow(YAML).to receive(:load_file).with('0.2.0.yml') { { 'Version' => '0.2.0', 'Date' => stubed_date } }
+      allow(Codelog::Presenter::VersionDataPresenter).to receive(:new).with({ 'Version' => '0.1.0', 'Date' => stubed_date }) { stub_presenter }
+      allow(Codelog::Presenter::VersionDataPresenter).to receive(:new).with({ 'Version' => '0.2.0', 'Date' => stubed_date }) { stub_presenter_second }
     end
 
     context 'without a changelog-backup file' do
