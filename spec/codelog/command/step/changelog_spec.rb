@@ -23,11 +23,16 @@ describe Codelog::Command::Step::Changelog do
 
     context 'without a changelog-backup file' do
       before :each do
-        allow(File).to receive(:file?).with('changelogs/releases/changelog-backup.md').and_return(false)
+        allow(File).to receive(:file?).and_return(false)
       end
 
       it 'creates CHANGELOG file' do
         expect(subject).to receive(:create_file)
+        subject.run
+      end
+
+      it 'includes changelog-backup if it exists' do
+        expect(subject).to receive(:changelog_backup_if_exists)
         subject.run
       end
 
@@ -37,13 +42,8 @@ describe Codelog::Command::Step::Changelog do
         subject.run
       end
     end
-
-    context 'with a changelog-backup file' do
-      it 'includes changelog-backup if it exists' do
-        pending('to do')
-      end
-    end
   end
+
   describe '.run' do
     it 'creates an instance of the class to run the command' do
       expect_any_instance_of(described_class).to receive(:run)
