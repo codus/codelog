@@ -1,5 +1,5 @@
 module Codelog
-  module Presenters
+  module Presenter
     class VersionDataPresenter
       def initialize(version_changes_data)
         @changes = version_changes_data
@@ -14,7 +14,8 @@ module Codelog
       end
 
       def modifications
-        @changes.dup.delete_if { |key| key == 'Version' || key == 'Date' }
+        non_modification_keys = ['Version', 'Date']
+        @changes.reject { |key| non_modification_keys.include?(key) }
       end
     end
   end
