@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 0.4.0
+### Fixed
+- Nested YML entries were print as hashes. Now codelog generates a nested Markdown
+
+---
+## 0.3.1
+### Fixed
+- Non-default input date fomat
+
+---
 ## 0.3.0
 ### Changed
 - Human-readable timestamp for the change files
