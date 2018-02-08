@@ -1,0 +1,3 @@
+"Fixed":
+  - Nested YML entries were print as hashes. Now codelog generates a nested Markdown
+
