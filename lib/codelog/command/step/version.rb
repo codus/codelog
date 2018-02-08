@@ -45,12 +45,27 @@ module Codelog
           end
         end
 
+        def add_entry(line, changes, level = 0)
+          if changes.is_a?(Hash)
+            changes.each do |key, values|
+              line.puts "#{"\t" * level}- #{key}"
+              add_entry(line, values, level + 1)
+            end
+          elsif changes.is_a?(Array)
+            changes.each do |change|
+              add_entry(line, change, level)
+            end
+          else
+            line.puts "#{"\t" * level}- #{changes}"
+          end
+        end
+
         def create_version_changelog_from(changes_hash)
           File.open("#{RELEASES_PATH}/#{@version}.md", 'a') do |line|
             line.puts "## #{Codelog::Config.version_tag(@version, @release_date)}"
             changes_hash.each do |category, changes|
               line.puts "### #{category}"
-              changes.each { |change| line.puts "- #{change}" }
+              add_entry(line, changes)
               line.puts "\n"
             end
             line.puts "---\n"
