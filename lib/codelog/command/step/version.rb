@@ -52,9 +52,7 @@ module Codelog
               add_entry(line, values, level + 1)
             end
           elsif changes.is_a?(Array)
-            changes.each do |change|
-              add_entry(line, change, level)
-            end
+            changes.each { |change| add_entry(line, change, level) }
           else
             line.puts "#{"\t" * level}- #{changes}"
           end
