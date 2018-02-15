@@ -17,6 +17,7 @@ module Codelog
 
           puts "== Creating #{full_file_name} change file based on example =="
           system! "cp changelogs/template.yml #{full_file_name}"
+          system! "${VISUAL:-${EDITOR:-nano}} #{full_file_name}" if options[:edit]
         end
       end
 
