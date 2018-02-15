@@ -11,7 +11,7 @@ module Codelog
 
     desc 'new', 'Generate a file from the template for the unreleased changes'
     def new
-      Codelog::Command::New.run
+      Codelog::Command::New.run options
     end
 
     desc 'release [VERSION] <RELEASE_DATE>', 'Generate new release updating changelog'
