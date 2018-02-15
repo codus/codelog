@@ -17,11 +17,18 @@ module Codelog
 
           puts "== Creating #{full_file_name} change file based on example =="
           system! "cp changelogs/template.yml #{full_file_name}"
-          system! "${VISUAL:-${EDITOR:-nano}} #{full_file_name}" if options[:edit]
+          system! "#{default_editor} #{full_file_name}" if options[:edit]
         end
       end
 
       private
+
+      def default_editor
+        # Looks for the default editor in VISUAL and EDITOR system variables
+        # if no variable is set it defaults to nano
+
+        '${VISUAL:-${EDITOR:-nano}}'
+      end
 
       def system!(*args)
         system(*args) || abort("\n== Command #{args} failed ==")
