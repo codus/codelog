@@ -1,0 +1,2 @@
+"Added":
+  - Ability to edit the created changefile by running `codelog new <-e|--edit>`
