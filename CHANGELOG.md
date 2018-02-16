@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ---
 ## 0.3.1
 ### Fixed
-- Non-default input date fomat
+- Non-default input date format
 
 ---
 ## 0.3.0
