@@ -10,8 +10,10 @@ module Codelog
     end
 
     desc 'new', 'Generate a file from the template for the unreleased changes'
+    method_option :edit, desc: 'Opens the default system editor after creating a changefile',
+                         aliases: '-e', type: :boolean
     def new
-      Codelog::Command::New.run
+      Codelog::Command::New.run options
     end
 
     desc 'release [VERSION] <RELEASE_DATE>', 'Generate new release updating changelog'
