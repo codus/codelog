@@ -123,10 +123,10 @@ describe Codelog::Command::Step::Version do
 
 
   describe '#changes_hash' do
-    context "with a not parseable yml file raises an error" do
+    context "when a not parseable yml file is given" do
       subject {described_class.new('1.2.3', '2012-12-12')}
 
-      it 'aborts with appropriate error message of parse' do
+      it 'aborts with an appropriate error message' do
         double_error = double("Psych::SyntaxError", problem: "found character that cannot start any token", line: "2", file: "spec/fixtures/files/not_parseable.yml")
         allow(Dir).to receive(:"[]") { ["spec/fixtures/files/not_parseable.yml"] }
         lambda { subject.run }.should raise_error SystemExit
