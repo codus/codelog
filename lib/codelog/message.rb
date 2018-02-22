@@ -32,6 +32,10 @@ module Codelog
           "Run the following command to create the missing file:\n\n" \
           'codelog setup'
         end
+
+        def could_not_parse_yaml(error)
+          "#{prefix}: #{error.problem.capitalize} in the line #{error.line} in #{error.file}"
+        end
       end
     end
 
