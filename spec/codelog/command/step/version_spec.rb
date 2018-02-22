@@ -120,4 +120,17 @@ describe Codelog::Command::Step::Version do
       described_class.run '1.2.3', '2012-12-12'
     end
   end
+
+
+  describe '#changes_hash' do
+    context "with a not parseable yml file raises an error" do
+      subject {described_class.new('1.2.3', '2012-12-12')}
+
+      it 'aborts with appropriate error message of parse' do
+        double_error = double("Psych::SyntaxError", problem: "found character that cannot start any token", line: "2", file: "spec/fixtures/files/not_parseable.yml")
+        allow(Dir).to receive(:"[]") { ["spec/fixtures/files/not_parseable.yml"] }
+        lambda { subject.run }.should raise_error SystemExit
+      end
+    end
+  end
 end
