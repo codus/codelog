@@ -34,7 +34,7 @@ module Codelog
         end
 
         def could_not_parse_yaml(error)
-          "#{prefix}: #{error.problem.capitalize} in the line #{error.line} in #{error.file}"
+          "#{prefix}: #{error.problem.capitalize} in #{error.file}:#{error.line}"
         end
       end
     end

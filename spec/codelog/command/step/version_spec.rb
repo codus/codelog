@@ -123,7 +123,7 @@ describe Codelog::Command::Step::Version do
 
 
   describe '#changes_hash' do
-    context "when a not parseable yml file is given" do
+    context "when a non parseable yml file is given" do
       subject {described_class.new('1.2.3', '2012-12-12')}
 
       it 'aborts with an appropriate error message' do
