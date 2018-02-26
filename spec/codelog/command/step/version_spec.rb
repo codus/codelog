@@ -126,9 +126,11 @@ describe Codelog::Command::Step::Version do
     context "when a non parseable yml file is given" do
       subject {described_class.new('1.2.3', '2012-12-12')}
 
-      it 'aborts with an appropriate error message' do
-        allow(Dir).to receive(:"[]") { ["spec/fixtures/files/not_parseable.yml"] }
-        expect { subject.run }.to raise_error SystemExit
+      before(:each) { allow(Dir).to receive(:"[]") { ["spec/fixtures/files/not_parseable.yml"] } }
+
+      it 'aborts with the appropriate message' do
+        expect { subject.run }.to raise_error(SystemExit).
+                with_message("ERROR: Found character that cannot start any token in spec/fixtures/files/not_parseable.yml:3")
       end
     end
   end
