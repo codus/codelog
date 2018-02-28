@@ -43,6 +43,8 @@ module Codelog
               changes | changes_to_be_added
             end
           end
+        rescue Psych::SyntaxError => error
+          abort(Codelog::Message::Error.could_not_parse_yaml(error))
         end
 
         def add_entry(line, changes, level = 0)

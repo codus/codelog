@@ -68,7 +68,7 @@ describe Codelog::Command::Step::Version do
           allow(subject).to receive(:unreleased_changes?).and_return(true)
           allow(subject).to receive(:create_version_changelog_from)
           allow(Codelog::Config).to receive(:version_tag)
-            .with(nil, '2012-12-12')
+            .with(nil, '2012-12-12')  
         end
 
         subject { described_class.new(nil, '2012-12-12') }
@@ -92,7 +92,7 @@ describe Codelog::Command::Step::Version do
           expect(subject).to receive(:abort).with Codelog::Message::Error.already_existing_version('1.2.3')
           subject.run
         end
-      end
+      end 
 
       describe 'with no changes to be released' do
         before :each do
@@ -118,6 +118,20 @@ describe Codelog::Command::Step::Version do
       allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
       expect_any_instance_of(described_class).to receive(:run)
       described_class.run '1.2.3', '2012-12-12'
+    end
+  end
+
+
+  describe '#changes_hash' do
+    context "when a non parseable yml file is given" do
+      subject {described_class.new('1.2.3', '2012-12-12')}
+
+      it 'aborts with the appropriate message' do
+        allow(Dir).to receive(:"[]") { ["spec/fixtures/files/not_parseable.yml"] }
+        # Regex will match the error message raised by SystemExit both Ruby and JRuby
+        expect { subject.run }.to raise_error(SystemExit)
+          .with_message(/ERROR: Found character(.)*that cannot start any token(.)*in spec\/fixtures\/files\/not_parseable.yml:3/)
+      end
     end
   end
 end
