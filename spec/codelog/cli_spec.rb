@@ -8,16 +8,30 @@ describe Codelog::CLI do
     end
   end
 
-  context 'with generic commands' do
-    GENERIC_COMMANDS = ['setup', 'new'].freeze
+  describe '#new' do
+    before :each do
+      allow(Codelog::Command::New).to receive(:run)
+    end
 
-    GENERIC_COMMANDS.each do |command|
-      it "calls the #{command} command" do
-        command_class = Module.const_get "Codelog::Command::#{command.capitalize}"
-        allow(command_class).to receive(:run)
-        subject.send(command)
-        expect(command_class).to have_received(:run)
-      end
+    it 'calls the new command' do
+      subject.new
+      expect(Codelog::Command::New).to have_received(:run)
+    end
+
+    it 'pass the change name to the command' do
+      subject.new('test_name')
+      expect(Codelog::Command::New).to have_received(:run).with('test_name', {})
+    end
+  end
+
+  describe '#setup' do
+    before :each do
+      allow(Codelog::Command::Setup).to receive(:run)
+    end
+
+    it 'calls the setup command' do
+      subject.setup
+      expect(Codelog::Command::Setup).to have_received(:run)
     end
   end
 
