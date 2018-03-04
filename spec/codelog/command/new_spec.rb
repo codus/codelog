@@ -14,22 +14,34 @@ describe Codelog::Command::New do
       subject.run
     end
 
-    it 'prints a message to notify the user about the file creation' do
-      expect(subject).to have_received(:puts)
+    context 'with no additional options' do
+      it 'prints a message to notify the user about the file creation' do
+        expect(subject).to have_received(:puts)
         .with('== Creating changelogs/unreleased/20180119134323984_change.yml change file based on example ==')
-    end
+      end
 
-    it 'creates a file for the unreleased partial changes' do
-      expect(subject).to have_received(:system)
+      it 'creates a file for the unreleased partial changes' do
+        expect(subject).to have_received(:system)
         .with('cp changelogs/template.yml changelogs/unreleased/20180119134323984_change.yml')
+      end
     end
 
     context "with 'edit' option" do
-      let(:options) { { edit: true } }
+      let(:options) {{ edit: true }}
+
+      it 'prints a message to notify the user about the file creation' do
+        expect(subject).to have_received(:puts)
+        .with('== Creating changelogs/unreleased/20180119134323984_change.yml change file based on example ==')
+      end
+
+      it 'creates a file for the unreleased partial changes' do
+        expect(subject).to have_received(:system)
+        .with('cp changelogs/template.yml changelogs/unreleased/20180119134323984_change.yml')
+      end
 
       it 'opens the default text editor with the created file' do
         expect(subject).to have_received(:system)
-          .with('${VISUAL:-${EDITOR:-nano}} changelogs/unreleased/20180119134323984_change.yml')
+        .with('${VISUAL:-${EDITOR:-nano}} changelogs/unreleased/20180119134323984_change.yml')
       end
     end
 
@@ -39,7 +51,12 @@ describe Codelog::Command::New do
       it 'converts the string to snake case notation, creating the file using it' do
         expect(subject).to have_received(:system)
           .with('cp changelogs/template.yml changelogs/unreleased/20180119134323984_test_name.yml')
-      end 
+      end
+
+      it 'prints a message of the file creation, using the custom name' do
+        expect(subject).to have_received(:puts)
+        .with('== Creating changelogs/unreleased/20180119134323984_test_name.yml change file based on example ==')
+      end
     end
   end
 
