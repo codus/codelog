@@ -11,7 +11,7 @@ module Codelog
       end
 
       def self.run(name, options)
-        Codelog::Command::New.new(name, options).run
+        new(name, options).run
       end
 
       def run
