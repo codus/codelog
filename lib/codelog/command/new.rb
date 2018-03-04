@@ -40,6 +40,8 @@ module Codelog
       end
 
       def change_file_name
+        # Converts the name to snake case
+
         @name.gsub(/(.)([A-Z])/, '\1_\2').downcase
       end
 
