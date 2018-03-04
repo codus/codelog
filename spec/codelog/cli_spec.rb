@@ -19,8 +19,9 @@ describe Codelog::CLI do
     end
 
     it 'pass the change name to the command' do
+      default_options = {}
       subject.new('test_name')
-      expect(Codelog::Command::New).to have_received(:run).with('test_name', {})
+      expect(Codelog::Command::New).to have_received(:run).with('test_name', default_options)
     end
   end
 
