@@ -68,21 +68,27 @@ The template can be as the following example:
 
 ## Usage
 
+### Creating a new change file
+
 After the initial setup every time a change is made, the developer should run the following command in the project root path:
 
 ``` bash
-$ codelog new
+$ codelog new <NAME>
 ```
 
-This will generate a change file on `changelogs/unreleased/` from the `template.yml` named with a timestamp value followed by `_change.yml`.
+This will generate a change file, in `YAML` format, on `changelogs/unreleased/` from the `template.yml`, named with a timestamp value followed by the the given `NAME`, converted to snake case, or the default name(`change`).
 
 The new change file should be filled with informations about the implemented change, all unused topics should be erased and the file committed.
+
+### Releasing a version
 
 Once all changes were merged and the release is ready to be packed, all that must be done is to run the following command:
 
 ``` bash
-$ codelog release {x.y.z}
+$ codelog release [VERSION] <RELEASE_DATE>
 ```
+Where the `VERSION` is mandatory and represents the number of the next version of the system. An additional parameter `RELEASE_DATE` can be used, and if so, the release date of the version will be that value. You can configure the format of this parameter in the configuration file, under `changelogs/codelog.yml`.
+
 No conflicts to resolve. All changes documented.
 
 It will execute 3 steps:

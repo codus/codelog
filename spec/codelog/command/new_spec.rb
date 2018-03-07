@@ -2,6 +2,11 @@ require 'spec_helper'
 
 describe Codelog::Command::New do
   describe '#run' do
+    let(:name) { 'change' }
+    let(:options) { {} }
+
+    subject { described_class.new name, options }
+
     before :each do
       allow(Time).to receive_message_chain(:now, :strftime) { '20180119134323984' }
       allow(subject).to receive(:puts)
@@ -9,10 +14,9 @@ describe Codelog::Command::New do
     end
 
     context 'with no additional options' do
-      let(:options) { Hash.new }
-
+      let(:options) { {} }
       before :each do
-        subject.run(options)
+        subject.run
       end
 
       it 'prints a message to notify the user about the file creation' do
@@ -30,7 +34,7 @@ describe Codelog::Command::New do
       let(:options) {{ edit: true }}
 
       before :each do
-        subject.run(options)
+        subject.run
       end
 
       it 'prints a message to notify the user about the file creation' do
@@ -71,7 +75,7 @@ describe Codelog::Command::New do
         allow(mocked_file).to receive(:puts)
         allow(Codelog::CLIs::Interactive).to receive(:new).and_return(mocked_interactive_object)
         allow(mocked_interactive_object).to receive(:run).and_return(mocked_hash)
-        subject.run(options)
+        subject.run
       end
 
       it 'calls the interactive hash creation method' do
@@ -82,7 +86,6 @@ describe Codelog::Command::New do
       it 'builds the change file from a hash' do
         expect(mocked_file).to have_received(:puts)
           .with("---\nAdded:\n- test_1:\n  - test_1_1\n- test_2\nRemoved:\n- test_3\n")
-        subject.run(options)
       end
 
       it 'prints a message to notify the user about the file creation' do
@@ -90,14 +93,30 @@ describe Codelog::Command::New do
           .with('== Creating changelogs/unreleased/20180119134323984_change.yml change file from the provided changes ==')
       end
     end
+
+    context 'with a name in a non snake case format' do
+      let(:name) { 'TestName' }
+      let(:options) { {} }
+      before :each do
+        subject.run
+      end
+
+      it 'converts the string to snake case notation, creating the file using it' do
+        expect(subject).to have_received(:system)
+          .with('cp changelogs/template.yml changelogs/unreleased/20180119134323984_test_name.yml')
+      end
+
+      it 'prints a message of the file creation, using the custom name' do
+        expect(subject).to have_received(:puts)
+        .with('== Creating changelogs/unreleased/20180119134323984_test_name.yml change file based on example ==')
+      end
+    end
   end
 
   describe '.run' do
     it 'creates an instance of the class to run the command' do
-      options = {}
-
-      expect_any_instance_of(described_class).to receive(:run).with(options)
-      described_class.run(options)
+      expect_any_instance_of(described_class).to receive(:run)
+      described_class.run('test_name', {})
     end
   end
 end

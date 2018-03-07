@@ -5,21 +5,26 @@ module Codelog
     class New
       include FileUtils
 
-      def self.run(options)
-        Codelog::Command::New.new.run options
+      def initialize(name, options)
+        @name = name
+        @options = options
       end
 
-      def run(options)
+      def self.run(name, options)
+        new(name, options).run
+      end
+
+      def run
         chdir Dir.pwd do
           # This script create a change file for the changelog documentation.
 
-          @file_name = "changelogs/unreleased/#{Time.now.strftime('%Y%m%d%H%M%S%L')}_change.yml"
-          if options[:interactive]
+          @file_name = "changelogs/unreleased/#{change_file_timestamp}_#{change_file_name}.yml"
+          if @options[:interactive]
             build_from_hash Codelog::CLIs::Interactive.new.run
           else
             build_from_template
           end
-          system! "#{default_editor} #{@file_name}" if options[:edit]
+          system! "#{default_editor} #{@file_name}" if @options[:edit]
         end
       end
 
@@ -42,6 +47,16 @@ module Codelog
         # if no variable is set it defaults to nano
 
         '${VISUAL:-${EDITOR:-nano}}'
+      end
+
+      def change_file_timestamp
+        Time.now.strftime('%Y%m%d%H%M%S%L')
+      end
+
+      def change_file_name
+        # Converts the name to snake case
+
+        @name.gsub(/(.)([A-Z])/, '\1_\2').downcase
       end
 
       def system!(*args)
