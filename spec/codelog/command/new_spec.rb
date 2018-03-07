@@ -10,7 +10,7 @@ describe Codelog::Command::New do
 
     context 'with no additional options' do
       let(:options) { Hash.new }
-      
+
       before :each do
         subject.run(options)
       end
@@ -70,13 +70,13 @@ describe Codelog::Command::New do
           .and_yield(mocked_file)
         allow(mocked_file).to receive(:puts)
         allow(Codelog::CLIs::Interactive).to receive(:new).and_return(mocked_interactive_object)
-        allow(mocked_interactive_object).to receive(:ask_for_changes).and_return(mocked_hash)
+        allow(mocked_interactive_object).to receive(:run).and_return(mocked_hash)
         subject.run(options)
       end
-      
+
       it 'calls the interactive hash creation method' do
         expect(Codelog::CLIs::Interactive).to have_received(:new)
-        expect(mocked_interactive_object).to have_received(:ask_for_changes)
+        expect(mocked_interactive_object).to have_received(:run)
       end
 
       it 'builds the change file from a hash' do

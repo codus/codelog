@@ -15,7 +15,7 @@ module Codelog
 
           @file_name = "changelogs/unreleased/#{Time.now.strftime('%Y%m%d%H%M%S%L')}_change.yml"
           if options[:interactive]
-            build_from_hash Codelog::CLIs::Interactive.new.ask_for_changes
+            build_from_hash Codelog::CLIs::Interactive.new.run
           else
             build_from_template
           end

@@ -7,7 +7,7 @@ describe Codelog::CLIs::Interactive do
     allow(YAML).to receive(:load_file).with('changelogs/template.yml').and_return sections_hash
   end
 
-  describe '#ask_for_changes' do
+  describe '#run' do
     let(:thor_questions_responses) do
       [
         "1", "test_1:", "test_1_1", "", "test_2", "",
@@ -19,12 +19,12 @@ describe Codelog::CLIs::Interactive do
     before :each do
       allow(subject).to receive(:say)
       allow(subject).to receive(:ask).and_return(*thor_questions_responses)
-      allow(subject).to receive(:yes?).with("\nWould you like to add a new log(Y|N)?")
-        .and_return(true, true, false)
+      allow(subject).to receive(:no?).with("\nWould you like to add a new log(Y|N)?")
+        .and_return(false, false, true)
     end
 
     it 'returns a hash with the changes to be added in a new change file' do
-      response = subject.ask_for_changes
+      response = subject.run
       expect(response).to eq(
         {
           "Added" => [

@@ -10,19 +10,38 @@ module Codelog
           @sections = YAML.load_file('changelogs/template.yml').keys
         end
 
-        def ask_for_changes
-          change_type = ask_for_type
-          say "\nType the entries for \e[33m#{change_type}\e[0m(ENTER to stop):"
-          result_hash = { change_type => build_array_response }
-          if yes? "\nWould you like to add a new log(Y|N)?"
-            result_hash.merge!(ask_for_changes) do |_, changes, changes_to_be_added|
-              changes | changes_to_be_added
-            end
+        def run
+          changes_hash = Hash.new([])
+          loop do
+            change_category = ask_for_type
+            say "\nType the entries for #{set_color(change_category, :yellow)}(ENTER to stop):"
+            changes_hash[change_category] += ask_for_changes
+            break if no? "\nWould you like to add a new log(Y|N)?"
           end
-          result_hash
+
+          changes_hash
         end
 
         private
+
+        def ask_for_changes(level = 1)
+          changes = []
+          loop do
+            change = ask('>' * level)
+
+            break if change.empty?
+
+            change = { change.chomp(':') => ask_for_changes(level + 1) } if subcategory?(change)
+
+            changes << change
+          end
+
+          changes
+        end
+
+        def subcategory?(change)
+          change.end_with?(':')
+        end
 
         def ask_for_type
           say 'Enter a change type number:'
@@ -30,23 +49,6 @@ module Codelog
             say "#{index + 1}. #{section}"
           end
           @sections[ask('>').to_i - 1]
-        end
-
-        def build_array_response(level = 1)
-          response = ask('>' * level)
-          if response.empty?
-            []
-          else
-            processed_response(response, level) | build_array_response(level)
-          end
-        end
-
-        def processed_response(response, level)
-          if response =~ /:$/
-            [{ response.gsub(/:$/, '') => build_array_response(level + 1) }]
-          else
-            [response]
-          end
         end
       end
     end
