@@ -35,11 +35,11 @@ module Codelog
         def ask_for_changes(changes = [], level = 1)
           change = ask('>' * level)
 
+          return changes if change.empty?
+
           change = { change.chomp(':') => ask_for_changes([], level + 1) } if subcategory?(change)
 
-          changes = ask_for_changes(changes.push(change), level) unless change.empty?
-
-          changes
+          ask_for_changes(changes.push(change))
         end
 
         def subcategory?(change)
