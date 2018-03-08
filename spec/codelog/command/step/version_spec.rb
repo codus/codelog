@@ -26,7 +26,7 @@ describe Codelog::Command::Step::Version do
         ['file_1.yml', 'file_2.yml']
       end
       allow(YAML).to receive(:load_file).with('file_1.yml') { { 'Category_1' => ['value_1'] } }
-      allow(YAML).to receive(:load_file).with('file_2.yml') { { 'Category_1' => ['value_2', { 'Subcategory_1': 'value_3' } ] } }
+      allow(YAML).to receive(:load_file).with('file_2.yml') { { 'Category_1' => ['value_2', { 'Subcategory_1' => 'value_3' } ] } }
       allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
       allow_any_instance_of(described_class).to receive(:config_file_exists?) { true }
     end
@@ -41,7 +41,7 @@ describe Codelog::Command::Step::Version do
 
       it 'merges the content of the files with the same category' do
         expect(subject).to receive(:create_version_changelog_from)
-          .with('Category_1' => ['value_1', 'value_2', { 'Subcategory_1': 'value_3' }])
+          .with('Category_1' => ['value_1', 'value_2', { 'Subcategory_1' => 'value_3' }])
         subject.run
       end
 
