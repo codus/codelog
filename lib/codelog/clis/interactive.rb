@@ -32,17 +32,12 @@ module Codelog
           @sections[ask('>').to_i - 1]
         end
 
-        def ask_for_changes(level = 1)
-          changes = []
-          loop do
-            change = ask('>' * level)
+        def ask_for_changes(changes = [], level = 1)
+          change = ask('>' * level)
 
-            break if change.empty?
+          change = { change.chomp(':') => ask_for_changes([], level + 1) } if subcategory?(change)
 
-            change = { change.chomp(':') => ask_for_changes(level + 1) } if subcategory?(change)
-
-            changes << change
-          end
+          changes = ask_for_changes(changes.push(change), level) unless change.empty?
 
           changes
         end
