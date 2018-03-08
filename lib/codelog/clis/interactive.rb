@@ -24,6 +24,14 @@ module Codelog
 
         private
 
+        def ask_for_type
+          say 'Enter a change type number:'
+          @sections.each_with_index do |section, index|
+            say "#{index + 1}. #{section}"
+          end
+          @sections[ask('>').to_i - 1]
+        end
+
         def ask_for_changes(level = 1)
           changes = []
           loop do
@@ -41,14 +49,6 @@ module Codelog
 
         def subcategory?(change)
           change.end_with?(':')
-        end
-
-        def ask_for_type
-          say 'Enter a change type number:'
-          @sections.each_with_index do |section, index|
-            say "#{index + 1}. #{section}"
-          end
-          @sections[ask('>').to_i - 1]
         end
       end
     end
