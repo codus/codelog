@@ -8,6 +8,12 @@ describe Codelog::Command::Step::Version do
       expect_any_instance_of(described_class).to receive(:abort).with Codelog::Message::Error.invalid_date_format
       described_class.new '1.2.4', '2012/12/12'
     end
+
+    it 'aborts when a config file is not provided' do
+      allow_any_instance_of(described_class).to receive(:config_file_exists?) { false }
+      expect_any_instance_of(described_class).to receive(:abort).with Codelog::Message::Error.missing_config_file
+      described_class.new '1.2.3', '2012-12-31'
+    end
   end
 
   describe '#run' do
@@ -20,7 +26,7 @@ describe Codelog::Command::Step::Version do
         ['file_1.yml', 'file_2.yml']
       end
       allow(YAML).to receive(:load_file).with('file_1.yml') { { 'Category_1' => ['value_1'] } }
-      allow(YAML).to receive(:load_file).with('file_2.yml') { { 'Category_1' => ['value_2'] } }
+      allow(YAML).to receive(:load_file).with('file_2.yml') { { 'Category_1' => ['value_2', { 'Subcategory_1': 'value_3' } ] } }
       allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
       allow_any_instance_of(described_class).to receive(:config_file_exists?) { true }
     end
@@ -35,7 +41,7 @@ describe Codelog::Command::Step::Version do
 
       it 'merges the content of the files with the same category' do
         expect(subject).to receive(:create_version_changelog_from)
-          .with('Category_1' => ['value_1', 'value_2'])
+          .with('Category_1' => ['value_1', 'value_2', { 'Subcategory_1': 'value_3' }])
         subject.run
       end
 
@@ -46,6 +52,8 @@ describe Codelog::Command::Step::Version do
         subject.run
         expect(mocked_release_file).to have_received(:puts).with '## 1.2.3 2012-12-12'
         expect(mocked_release_file).to have_received(:puts).with '### Category_1'
+        expect(mocked_release_file).to have_received(:puts).with '- Subcategory_1'
+        expect(mocked_release_file).to have_received(:puts).with "\t- value_3"
       end
 
       it 'checks the existence of an already existing version of the release' do
@@ -68,7 +76,7 @@ describe Codelog::Command::Step::Version do
           allow(subject).to receive(:unreleased_changes?).and_return(true)
           allow(subject).to receive(:create_version_changelog_from)
           allow(Codelog::Config).to receive(:version_tag)
-            .with(nil, '2012-12-12')  
+            .with(nil, '2012-12-12')
         end
 
         subject { described_class.new(nil, '2012-12-12') }
@@ -92,7 +100,7 @@ describe Codelog::Command::Step::Version do
           expect(subject).to receive(:abort).with Codelog::Message::Error.already_existing_version('1.2.3')
           subject.run
         end
-      end 
+      end
 
       describe 'with no changes to be released' do
         before :each do
