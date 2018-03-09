@@ -9,10 +9,17 @@ describe Codelog::Command::Step::Version do
       described_class.new '1.2.4', '2012/12/12'
     end
 
-    it 'aborts when a config file is not provided' do
-      allow_any_instance_of(described_class).to receive(:config_file_exists?) { false }
-      expect_any_instance_of(described_class).to receive(:abort).with Codelog::Message::Error.missing_config_file
-      described_class.new '1.2.3', '2012-12-31'
+    context 'when config file is not provided' do
+      around(:each) do |example|
+        File.rename(described_class::CONFIG_FILE_PATH, "#{described_class::CONFIG_FILE_PATH}.fake")
+        example.run
+        File.rename("#{described_class::CONFIG_FILE_PATH}.fake", described_class::CONFIG_FILE_PATH)
+      end
+
+      it 'aborts with the appropriate message' do
+        expect_any_instance_of(described_class).to receive(:abort).with Codelog::Message::Error.missing_config_file
+        described_class.new '1.2.3', '2012-12-31'
+      end
     end
   end
 
