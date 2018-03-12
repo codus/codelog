@@ -1,0 +1,3 @@
+"Added":
+  - Tests to verify if changes subcategories are properly tabulated on markdown file
+  - Tests to verify if `release` command is properly aborted if no `codelog.yml` file is found
