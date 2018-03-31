@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 0.6.0
+### Added
+- The `new` command receives a `NAME` parameter that will be converted to the unreleased file name
+- Tests to verify if changes subcategories are properly tabulated on markdown file
+- Tests to verify if `release` command is properly aborted if no `codelog.yml` file is found
+- Interactive creation of the change files
+
+### Fixed
+- When an unreleased file is not parseable to yml, the user will get a friendly message, saying both file and line that are wrong.
+
+---
 ## 0.5.0
 ### Added
 - Ability to edit the created changefile by running `codelog new <-e|--edit>`
