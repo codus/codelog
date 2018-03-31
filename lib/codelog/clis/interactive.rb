@@ -39,7 +39,7 @@ module Codelog
 
           change = { change.chomp(':') => ask_for_changes([], level + 1) } if subcategory?(change)
 
-          ask_for_changes(changes.push(change))
+          ask_for_changes(changes.push(change), level)
         end
 
         def subcategory?(change)
