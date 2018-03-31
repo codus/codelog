@@ -12,6 +12,8 @@ module Codelog
     desc 'new <NAME>', 'Generate a file from the template for the unreleased changes'
     method_option :edit, desc: 'Opens the default system editor after creating a changefile',
                          aliases: '-e', type: :boolean
+    method_option :interactive, desc: 'Add contents interactively to change file',
+                                aliases: '-i', type: :boolean
     def new(name = 'change')
       Codelog::Command::New.run name, options
     end
