@@ -80,6 +80,8 @@ This will generate a change file, in `YAML` format, on `changelogs/unreleased/` 
 
 The new change file should be filled with informations about the implemented change, all unused topics should be erased and the file committed.
 
+Additionally, you can pass some extra options to the `new` command. Type `codelog help new` in your console for more information.
+
 ### Releasing a version
 
 Once all changes were merged and the release is ready to be packed, all that must be done is to run the following command:

@@ -1,2 +1,0 @@
-"Fixed":
-  - When an unreleased file is not parseable to yml, the user will get a friendly message, saying both file and line that are wrong.
