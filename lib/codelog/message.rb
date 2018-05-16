@@ -45,7 +45,7 @@ module Codelog
           'WARNING'
         end
 
-        def mantain_versioning_of_existing_changelog?
+        def maintain_versioning_of_existing_changelog?
           "#{prefix}: There is already a file named CHANGELOG.md within " \
           'your project. Do you wish to mantain its versioning? (Y/N)'
         end

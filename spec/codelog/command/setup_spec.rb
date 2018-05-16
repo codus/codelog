@@ -56,13 +56,13 @@ describe Codelog::Command::Setup do
       allow(subject).to receive(:receive).and_return true
       allow(subject).to receive(:puts).with('== Copying existing changelog to releases folder ==')
       allow(subject).to receive(:copy_and_mark_changelog)
-      expect(subject).to receive(:puts).with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?)
+      expect(subject).to receive(:puts).with(Codelog::Message::Warning.maintain_versioning_of_existing_changelog?)
 
       subject.run
     end
 
     it 'calls the copy changelog method' do
-      allow(subject).to receive(:yes?).with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?).and_return(true)
+      allow(subject).to receive(:yes?).with(Codelog::Message::Warning.maintain_versioning_of_existing_changelog?).and_return(true)
 
       expect(subject).to receive(:puts).with('== Copying existing changelog to releases folder ==')
       expect(subject).to receive(:copy_and_mark_changelog)
@@ -71,7 +71,7 @@ describe Codelog::Command::Setup do
     end
 
     it 'copies the old changelog and add a mark' do
-      allow(subject).to receive(:yes?).with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?).and_return(true)
+      allow(subject).to receive(:yes?).with(Codelog::Message::Warning.maintain_versioning_of_existing_changelog?).and_return(true)
       allow(subject).to receive(:puts).with('== Copying existing changelog to releases folder ==')
       allow(mocked_original_file).to receive(:read)
       allow(mocked_destination_file).to receive(:write)
@@ -85,7 +85,7 @@ describe Codelog::Command::Setup do
 
     it 'prompts a message asking if the old file should be deleted' do
       allow(subject).to receive(:receive).and_return false
-      allow(subject).to receive(:puts).with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?)
+      allow(subject).to receive(:puts).with(Codelog::Message::Warning.maintain_versioning_of_existing_changelog?)
 
       expect(subject).to receive(:puts).with(Codelog::Message::Warning.delete_existing_changelog?)
 
@@ -93,7 +93,7 @@ describe Codelog::Command::Setup do
     end
 
     it 'deletes the existing changelog if prompted' do
-      allow(subject).to receive(:yes?).with(Codelog::Message::Warning.mantain_versioning_of_existing_changelog?).and_return(false)
+      allow(subject).to receive(:yes?).with(Codelog::Message::Warning.maintain_versioning_of_existing_changelog?).and_return(false)
       allow(subject).to receive(:yes?).with(Codelog::Message::Warning.delete_existing_changelog?).and_return(true)
 
       expect(subject).to receive(:puts).with('== Deleting existing changelog ==')
