@@ -36,6 +36,10 @@ module Codelog
         def could_not_parse_yaml(error)
           "#{prefix}: #{error.problem.capitalize} in #{error.file}:#{error.line}"
         end
+
+        def invalid_version_type(version_type)
+          "#{version_type} is not a valid version type."
+        end
       end
     end
 
