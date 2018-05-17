@@ -99,6 +99,12 @@ It will execute 3 steps:
 - Deletes the change files at `changelogs/unreleased/` because they now compose the new release. If it was not deleted, the change would appear repeated in the next release.
 - Updates the `CHANGELOG.md` file by merging all the releases at `changelogs/releases/`.
 
+If you don't want to specify the release version manually, you can use the `bump` command:
+```bash
+$ codelog bump [major|minor|patch] <RELEASE_DATE>
+```
+Where the first mandatory parameter is the desired release type, i.e: If you don't have any release, `codelog bump patch` will release the 0.0.1 version.
+
 ## Configuring
 
 Since version 0.3.0, there are a few configurations that are possible. You can choose:
