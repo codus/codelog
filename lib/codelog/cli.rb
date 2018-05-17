@@ -24,7 +24,8 @@ module Codelog
       Codelog::Command::Release.run version_number, release_date
     end
 
-    desc 'bump [VERSION_TYPE] <RELEASE_DATE>', ' Bumps the next version, according to the desired release'
+    desc 'bump [VERSION_TYPE] <RELEASE_DATE>', 'Bumps the next version,
+     being it major, minor or patch'
     def bump(version_type, release_date =
                 Date.today.strftime(Codelog::Config.date_input_format))
       Codelog::Command::Bump.run version_type, release_date
