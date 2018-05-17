@@ -3,29 +3,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## 0.6.1
-### Added
-- New features implemented
-
-### Changed
-- Changes to existing feature
-
-### Deprecated
-- Features that are soon to be removed
-
-### Removed
-- Features that were removed
-
-### Fixed
-- Changes to broken code
-
-### Security
-- Changes that fix vulnerabilities
-
-### Deploy notes
-- Changes that should impact the deploy process and what should be made before it
-
----
 ## 0.6.0
 ### Added
 - The `new` command receives a `NAME` parameter that will be converted to the unreleased file name
