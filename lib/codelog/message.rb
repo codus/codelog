@@ -51,7 +51,7 @@ module Codelog
 
         def maintain_versioning_of_existing_changelog?
           "#{prefix}: There is already a file named CHANGELOG.md within " \
-          'your project. Do you wish to mantain its versioning? (Y/N)'
+          'your project. Do you wish to maintain its versioning? (Y/N)'
         end
 
         def delete_existing_changelog?
