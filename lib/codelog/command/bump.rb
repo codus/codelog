@@ -4,6 +4,7 @@ module Codelog
       CHANGELOG_RELEASES_PATH = 'changelogs/releases/'.freeze
       CHANGELOG_RELEASE_REGEXP = /^\d*\.{1}\d*\.{1}\d*$/
       VALID_VERSION_TYPES = ['major', 'minor', 'patch'].freeze
+      INITIAL_RELEASE_VERSION = '0.0.0'.freeze
 
       def self.run(version_type, release_date)
         Codelog::Command::Bump.new.run version_type, release_date
@@ -38,7 +39,9 @@ module Codelog
           file_path.gsub(CHANGELOG_RELEASES_PATH, '').gsub('.md', '')
         end.grep(CHANGELOG_RELEASE_REGEXP)
 
-        released_versions.max_by { |version_string| Gem::Version.new(version_string) }
+        released_versions.max_by do |version_string|
+          Gem::Version.new(version_string)
+        end || INITIAL_RELEASE_VERSION
       end
     end
   end

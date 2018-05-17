@@ -31,6 +31,18 @@ describe Codelog::Command::Bump do
           expect(Codelog::Command::Release).to have_received(:run).with('1.2.4', '12-12-2012')
         end
       end
+
+      context 'when there is no previous release' do
+        before do
+          allow(Dir).to receive_message_chain(:glob, :map).and_return([])
+        end
+
+        it 'calls the release command bumping from the 0.0.0 version' do
+          subject.run 'minor', '12-12-2012'
+
+          expect(Codelog::Command::Release).to have_received(:run).with('0.1.0', '12-12-2012')
+        end
+      end
     end
 
     context 'with a invalid parameter' do
