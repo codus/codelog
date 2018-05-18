@@ -2,8 +2,18 @@ require 'spec_helper'
 
 describe Codelog::Command::Bump do
   describe '#run' do
+    let(:files) do
+       [
+         'changelogs/releases/0.0.0.md',
+         'changelogs/releases/1.2.3.md',
+         'changelogs/releases/bla.txt',
+         'changelogs/releases/.gitignore',
+         'changelogs/releases/md1.2.4.md'
+       ]
+    end
+
     before do
-      allow(Dir).to receive_message_chain(:glob, :map).and_return(['0.0.0','1.2.3'])
+      allow(Dir).to receive(:glob).and_return(files)
       allow(Codelog::Command::Release).to receive(:run)
     end
 
@@ -34,7 +44,7 @@ describe Codelog::Command::Bump do
 
       context 'when there is no previous release' do
         before do
-          allow(Dir).to receive_message_chain(:glob, :map).and_return([])
+          allow(Dir).to receive(:glob).and_return([])
         end
 
         it 'calls the release command bumping from the 0.0.0 version' do
