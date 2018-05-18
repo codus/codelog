@@ -23,7 +23,7 @@ module Codelog
       def next_version(version_type)
         last_version = last_created_changelog.split('.').map(&:to_i)
 
-        case version_type
+        case version_type.downcase
         when 'major'
           last_version = [(last_version[0] + 1), 0, 0]
         when 'minor'
