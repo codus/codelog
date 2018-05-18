@@ -11,7 +11,7 @@ module Codelog
       end
 
       def run(version_type, release_date)
-        unless VALID_VERSION_TYPES.include?(version_type)
+        unless VALID_VERSION_TYPES.include?(version_type.downcase)
           abort(Codelog::Message::Error.invalid_version_type(version_type))
         end
 
