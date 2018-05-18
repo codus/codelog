@@ -45,4 +45,12 @@ describe Codelog::CLI do
       end
     end
   end
+
+  describe '#bump' do
+    it 'calls the bump command' do
+      allow(Codelog::Command::Bump).to receive(:run)
+      subject.bump 'major', '2012-12-12'
+      expect(Codelog::Command::Bump).to have_received(:run).with 'major', '2012-12-12'
+    end
+  end
 end
