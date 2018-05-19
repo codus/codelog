@@ -1,0 +1,5 @@
+"Added":
+  - "Command `codelog bump [major|minor|patch]` that automatically sets the next version"
+
+"Fixed":
+  - "Typos on the method `maintain_versioning_of_existing_changelog?` name and printed message"

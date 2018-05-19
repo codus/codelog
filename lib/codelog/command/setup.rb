@@ -45,7 +45,7 @@ module Codelog
 
       def handle_existing_changelog
         return unless old_changelog_exists?
-        if yes? Codelog::Message::Warning.mantain_versioning_of_existing_changelog?
+        if yes? Codelog::Message::Warning.maintain_versioning_of_existing_changelog?
           puts '== Copying existing changelog to releases folder =='
           copy_and_mark_changelog
         elsif yes? Codelog::Message::Warning.delete_existing_changelog?

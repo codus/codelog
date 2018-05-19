@@ -36,6 +36,10 @@ module Codelog
         def could_not_parse_yaml(error)
           "#{prefix}: #{error.problem.capitalize} in #{error.file}:#{error.line}"
         end
+
+        def invalid_version_type(version_type)
+          "#{version_type} is not a valid version type."
+        end
       end
     end
 
@@ -45,9 +49,9 @@ module Codelog
           'WARNING'
         end
 
-        def mantain_versioning_of_existing_changelog?
+        def maintain_versioning_of_existing_changelog?
           "#{prefix}: There is already a file named CHANGELOG.md within " \
-          'your project. Do you wish to mantain its versioning? (Y/N)'
+          'your project. Do you wish to maintain its versioning? (Y/N)'
         end
 
         def delete_existing_changelog?
