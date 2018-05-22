@@ -12,7 +12,7 @@ module Codelog
         UNRELEASED_LOGS_PATH = 'changelogs/unreleased'.freeze
         CONFIG_FILE_PATH = 'changelogs/codelog.yml'.freeze
 
-        def initialize(version, release_date, options = {} )
+        def initialize(version, release_date, options = {})
           abort(Codelog::Message::Error.missing_config_file) unless config_file_exists?
           @version = version
           @release_date = Date.strptime(release_date, Codelog::Config.date_input_format).to_s
