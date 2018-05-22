@@ -1,2 +1,5 @@
 "Added":
   - "Preview option for changelogs on the `release` and `bump` command"
+
+"Fixed":
+  - "Test file (`version_spec`), previously, this test would fail if you run it alone"
