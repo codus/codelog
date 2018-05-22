@@ -105,6 +105,15 @@ $ codelog bump [major|minor|patch] <RELEASE_DATE>
 ```
 Where the first mandatory parameter is the desired release type, i.e: If you don't have any release, `codelog bump patch` will release the 0.0.1 version.
 
+### Preview a Release
+
+Sometimes, you just want to check the developed changes, or preview how the next release will look like, to do so, you can pass the `[-p|--preview]` option on the `release` and `bump` commands. For instance, the following:
+
+``` bash
+$ codelog release 1.0.0 --preview
+```
+Will display a preview of your changes on your console as if the version **1.0.0** has been released. **This feature does not support windows´s cmd.**
+
 ## Configuring
 
 Since version 0.3.0, there are a few configurations that are possible. You can choose:
