@@ -19,7 +19,7 @@ module Codelog
     end
 
     desc 'release [VERSION] <RELEASE_DATE>', 'Generate new release updating changelog'
-    method_option :preview, desc: 'Prints the preview of the next release',
+    method_option :preview, desc: 'Prints the preview of the specified version release',
                             aliases: ['-p', '--preview'], type: :boolean
     def release(version_number, release_date =
                 Date.today.strftime(Codelog::Config.date_input_format))
@@ -28,9 +28,11 @@ module Codelog
 
     desc 'bump [VERSION_TYPE] <RELEASE_DATE>', 'Bumps the next version,
      being it major, minor or patch'
+    method_option :preview, desc: 'Prints the preview of the next version',
+                      aliases: ['-p', '--preview'], type: :boolean
     def bump(version_type, release_date =
                 Date.today.strftime(Codelog::Config.date_input_format))
-      Codelog::Command::Bump.run version_type, release_date
+      Codelog::Command::Bump.run version_type, release_date, options
     end
   end
 end
