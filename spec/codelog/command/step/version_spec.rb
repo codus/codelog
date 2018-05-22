@@ -27,6 +27,7 @@ describe Codelog::Command::Step::Version do
     subject { described_class.new('1.2.3', '2012-12-12') }
 
     let(:mocked_release_file) { double(File) }
+    let(:mocked_string_io) { double(StringIO) }
 
     before :each do
       allow(Dir).to receive(:"[]").with('changelogs/unreleased/*.yml') do
@@ -36,6 +37,8 @@ describe Codelog::Command::Step::Version do
       allow(YAML).to receive(:load_file).with('file_2.yml') { { 'Category_1' => ['value_2', { 'Subcategory_1' => 'value_3' } ] } }
       allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
       allow_any_instance_of(described_class).to receive(:config_file_exists?) { true }
+      allow(File).to receive(:open).with('changelogs/releases/1.2.3.md', 'a')
+                                    .and_yield(mocked_release_file)
     end
 
     context "within normal run" do
@@ -44,35 +47,61 @@ describe Codelog::Command::Step::Version do
         allow(subject).to receive(:unreleased_changes?).and_return(true)
         allow(Codelog::Config).to receive(:version_tag)
           .with('1.2.3', '2012-12-12') { '1.2.3 2012-12-12' }
+        allow(mocked_release_file).to receive(:puts)
       end
 
       it 'merges the content of the files with the same category' do
-        expect(subject).to receive(:create_version_changelog_from)
+        expect(subject).to receive(:generate_file_content_from)
           .with('Category_1' => ['value_1', 'value_2', { 'Subcategory_1' => 'value_3' }])
         subject.run
       end
 
-      it 'creates a release using the unreleased changes' do
-        allow(mocked_release_file).to receive(:puts)
-        allow(File).to receive(:open).with('changelogs/releases/1.2.3.md', 'a')
-                                     .and_yield(mocked_release_file)
+      it 'generates the release content using the unreleased changes' do
+        allow(StringIO).to receive(:new).and_return mocked_string_io
+        allow(mocked_string_io).to receive(:puts)
+        allow(mocked_string_io).to receive(:string)
+
         subject.run
-        expect(mocked_release_file).to have_received(:puts).with '## 1.2.3 2012-12-12'
-        expect(mocked_release_file).to have_received(:puts).with '### Category_1'
-        expect(mocked_release_file).to have_received(:puts).with '- Subcategory_1'
-        expect(mocked_release_file).to have_received(:puts).with "\t- value_3"
+
+        expect(mocked_string_io).to have_received(:puts).with '## 1.2.3 2012-12-12'
+        expect(mocked_string_io).to have_received(:puts).with '### Category_1'
+        expect(mocked_string_io).to have_received(:puts).with '- Subcategory_1'
+        expect(mocked_string_io).to have_received(:puts).with "\t- value_3"
+        expect(mocked_string_io).to have_received(:string)
       end
 
       it 'checks the existence of an already existing version of the release' do
-        allow(subject).to receive(:create_version_changelog_from)
+        allow(subject).to receive(:save_version_changelog)
         expect(subject).to receive(:version_exists?)
         subject.run
       end
 
       it 'checks the existence of change files' do
-        allow(subject).to receive(:create_version_changelog_from)
+        allow(subject).to receive(:save_version_changelog)
         expect(subject).to receive(:unreleased_changes?)
         subject.run
+      end
+
+      context 'with the preview option' do
+        it 'prints the release content on the console' do
+          allow(subject).to receive(:generate_file_content_from).and_return('Added new feature')
+          expect_any_instance_of(IO).to receive(:puts).with 'Added new feature'
+
+          subject.run
+
+          expect(IO).to have_received(:popen).with('less', 'w')
+        end
+      end
+
+      context 'without the preview option' do
+        it 'dumps the release content into a file' do
+          allow(subject).to receive(:generate_file_content_from).and_return('Added new feature')
+          expect_any_instance_of(File).to receive(:puts).with 'Added new feature'
+
+          subject.run
+
+          expect(File).to have_received(:open).with('changelogs/releases/1.2.3.md', 'a')
+        end
       end
     end
 
@@ -81,7 +110,7 @@ describe Codelog::Command::Step::Version do
         before :each do
           allow(File).to receive(:file?).with('changelogs/releases/.md').and_return(false)
           allow(subject).to receive(:unreleased_changes?).and_return(true)
-          allow(subject).to receive(:create_version_changelog_from)
+          allow(subject).to receive(:save_version_changelog)
           allow(Codelog::Config).to receive(:version_tag)
             .with(nil, '2012-12-12')
         end
@@ -98,7 +127,7 @@ describe Codelog::Command::Step::Version do
       describe 'with an already existing version' do
         before do
           allow(subject).to receive(:version_exists?).and_return(true)
-          allow(subject).to receive(:create_version_changelog_from)
+          allow(subject).to receive(:save_version_changelog)
           allow(Codelog::Config).to receive(:version_tag)
             .with('1.2.3', '2012-12-12')
         end
@@ -112,7 +141,7 @@ describe Codelog::Command::Step::Version do
       describe 'with no changes to be released' do
         before :each do
           allow(File).to receive(:file?).and_return(false)
-          allow(subject).to receive(:create_version_changelog_from)
+          allow(subject).to receive(:save_version_changelog)
           allow(Dir).to receive(:"[]").with('changelogs/unreleased/*.yml').and_return([])
           allow(Codelog::Config).to receive(:version_tag)
             .with('1.2.3', '2012-12-12')
@@ -128,16 +157,30 @@ describe Codelog::Command::Step::Version do
   end
 
   describe '.run' do
+    let(:mocked_release_file) { double(File) }
+    before(:each) do
+      allow(File).to receive(:open).and_yield(mocked_release_file)
+      allow(mocked_release_file).to receive(:puts)
+    end
+
     it 'creates an instance of the class to run the command' do
       allow_any_instance_of(described_class).to receive(:config_file_exists?) { true }
       allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
       expect_any_instance_of(described_class).to receive(:run)
-      described_class.run '1.2.3', '2012-12-12'
+      described_class.run '1.2.4', '2012-12-12'
     end
   end
 
 
   describe '#changes_hash' do
+    let(:mocked_release_file) { double(File) }
+    before(:each) do
+      allow(File).to receive(:open).and_call_original
+      allow(File).to receive(:open).with('changelogs/releases/1.2.3.md', 'a')
+                                    .and_yield(mocked_release_file)
+      allow(mocked_release_file).to receive(:puts)
+    end
+
     context "when a non parseable yml file is given" do
       subject {described_class.new('1.2.3', '2012-12-12')}
 
