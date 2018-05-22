@@ -170,7 +170,6 @@ describe Codelog::Command::Step::Version do
     end
   end
 
-
   describe '#changes_hash' do
     let(:mocked_release_file) { double(File) }
     before(:each) do
