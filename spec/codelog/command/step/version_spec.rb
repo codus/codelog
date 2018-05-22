@@ -82,25 +82,24 @@ describe Codelog::Command::Step::Version do
         subject.run
       end
 
+      it 'dumps the release content into a file' do
+        allow(subject).to receive(:generate_file_content_from).and_return('Added new feature')
+
+        subject.run
+
+        expect(File).to have_received(:open).with('changelogs/releases/1.2.3.md', 'a')
+        expect(mocked_release_file).to have_received(:puts).with 'Added new feature'
+      end
+
       context 'with the preview option' do
+        subject { described_class.new('1.2.3', '2012-12-12', preview: true) }
+
         it 'prints the release content on the console' do
-          allow(subject).to receive(:generate_file_content_from).and_return('Added new feature')
-          expect_any_instance_of(IO).to receive(:puts).with 'Added new feature'
+          allow(IO).to receive(:popen)
 
           subject.run
 
           expect(IO).to have_received(:popen).with('less', 'w')
-        end
-      end
-
-      context 'without the preview option' do
-        it 'dumps the release content into a file' do
-          allow(subject).to receive(:generate_file_content_from).and_return('Added new feature')
-          expect_any_instance_of(File).to receive(:puts).with 'Added new feature'
-
-          subject.run
-
-          expect(File).to have_received(:open).with('changelogs/releases/1.2.3.md', 'a')
         end
       end
     end

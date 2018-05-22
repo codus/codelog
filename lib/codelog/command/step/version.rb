@@ -12,16 +12,17 @@ module Codelog
         UNRELEASED_LOGS_PATH = 'changelogs/unreleased'.freeze
         CONFIG_FILE_PATH = 'changelogs/codelog.yml'.freeze
 
-        def initialize(version, release_date)
+        def initialize(version, release_date, options = {} )
           abort(Codelog::Message::Error.missing_config_file) unless config_file_exists?
           @version = version
           @release_date = Date.strptime(release_date, Codelog::Config.date_input_format).to_s
+          @options = options
         rescue ArgumentError
           abort(Codelog::Message::Error.invalid_date_format)
         end
 
-        def self.run(version, release_date)
-          Codelog::Command::Step::Version.new(version, release_date).run
+        def self.run(version, release_date, options = {})
+          Codelog::Command::Step::Version.new(version, release_date, options).run
         end
 
         def run
@@ -29,7 +30,11 @@ module Codelog
           abort(Codelog::Message::Error.already_existing_version(@version)) if version_exists?
           abort(Codelog::Message::Error.no_detected_changes(@version)) unless unreleased_changes?
           chdir Dir.pwd do
-            create_version_changelog_from changes_hash
+            if @options[:preview]
+              print_version_changelog
+            else
+              save_version_changelog
+            end
           end
         end
 
@@ -60,16 +65,26 @@ module Codelog
           end
         end
 
-        def create_version_changelog_from(changes_hash)
+        def save_version_changelog
           File.open("#{RELEASES_PATH}/#{@version}.md", 'a') do |line|
-            line.puts "## #{Codelog::Config.version_tag(@version, @release_date)}"
-            changes_hash.each do |category, changes|
-              line.puts "### #{category}"
-              add_entry(line, changes)
-              line.puts "\n"
-            end
-            line.puts "---\n"
+            line.puts generate_file_content_from(changes_hash)
           end
+        end
+
+        def print_version_changelog
+          IO.popen('less', 'w') { |output| output.puts generate_file_content_from(changes_hash) }
+        end
+
+        def generate_file_content_from(changes_hash)
+          content = StringIO.new
+          content.puts "## #{Codelog::Config.version_tag(@version, @release_date)}"
+          changes_hash.each do |category, changes|
+            content.puts "### #{category}"
+            add_entry(content, changes)
+            content.puts "\n"
+          end
+          content.puts "---\n"
+          content.string
         end
 
         def version_exists?
