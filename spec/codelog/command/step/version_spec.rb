@@ -10,10 +10,8 @@ describe Codelog::Command::Step::Version do
     end
 
     context 'when config file is not provided' do
-      around(:each) do |example|
-        File.rename(described_class::CONFIG_FILE_PATH, "#{described_class::CONFIG_FILE_PATH}.fake")
-        example.run
-        File.rename("#{described_class::CONFIG_FILE_PATH}.fake", described_class::CONFIG_FILE_PATH)
+      before(:each) do
+        allow_any_instance_of(described_class).to receive(:config_file_exists?) { false }
       end
 
       it 'aborts with the appropriate message' do
