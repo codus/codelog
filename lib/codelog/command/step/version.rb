@@ -43,6 +43,30 @@ module Codelog
           end
         end
 
+        def print_version_changelog
+          IO.popen('less', 'w') { |output| output.puts generate_file_content_from(changes_hash) }
+        end
+
+        def save_version_changelog
+          chdir Dir.pwd do
+            File.open("#{RELEASES_PATH}/#{@version}.md", 'a') do |line|
+              line.puts generate_file_content_from(changes_hash)
+            end
+          end
+        end
+
+        def generate_file_content_from(changes_hash)
+          file_content = StringIO.new
+          file_content.puts "## #{Codelog::Config.version_tag(@version, @release_date)}"
+          changes_hash.each do |category, changes|
+            file_content.puts "### #{category}"
+            add_entry(file_content, changes)
+            file_content.puts "\n"
+          end
+          file_content.puts "---\n"
+          file_content.string
+        end
+
         def changes_hash
           change_files_paths = Dir["#{UNRELEASED_LOGS_PATH}/*.yml"]
           change_files_paths.inject({}) do |all_changes, change_file|
@@ -66,30 +90,6 @@ module Codelog
           else
             line.puts "#{"\t" * level}- #{changes}"
           end
-        end
-
-        def save_version_changelog
-          chdir Dir.pwd do
-            File.open("#{RELEASES_PATH}/#{@version}.md", 'a') do |line|
-              line.puts generate_file_content_from(changes_hash)
-            end
-          end
-        end
-
-        def print_version_changelog
-          IO.popen('less', 'w') { |output| output.puts generate_file_content_from(changes_hash) }
-        end
-
-        def generate_file_content_from(changes_hash)
-          file_content = StringIO.new
-          file_content.puts "## #{Codelog::Config.version_tag(@version, @release_date)}"
-          changes_hash.each do |category, changes|
-            file_content.puts "### #{category}"
-            add_entry(file_content, changes)
-            file_content.puts "\n"
-          end
-          file_content.puts "---\n"
-          file_content.string
         end
 
         def version_exists?
