@@ -29,12 +29,10 @@ module Codelog
           abort(Codelog::Message::Error.missing_version_number) if @version.nil?
           abort(Codelog::Message::Error.already_existing_version(@version)) if version_exists?
           abort(Codelog::Message::Error.no_detected_changes(@version)) unless unreleased_changes?
-          chdir Dir.pwd do
-            if @options[:preview]
-              print_version_changelog
-            else
-              save_version_changelog
-            end
+          if @options[:preview]
+            print_version_changelog
+          else
+            save_version_changelog
           end
         end
 
@@ -66,8 +64,10 @@ module Codelog
         end
 
         def save_version_changelog
-          File.open("#{RELEASES_PATH}/#{@version}.md", 'a') do |line|
-            line.puts generate_file_content_from(changes_hash)
+          chdir Dir.pwd do
+            File.open("#{RELEASES_PATH}/#{@version}.md", 'a') do |line|
+              line.puts generate_file_content_from(changes_hash)
+            end
           end
         end
 
