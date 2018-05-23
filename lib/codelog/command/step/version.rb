@@ -29,14 +29,19 @@ module Codelog
           abort(Codelog::Message::Error.missing_version_number) if @version.nil?
           abort(Codelog::Message::Error.already_existing_version(@version)) if version_exists?
           abort(Codelog::Message::Error.no_detected_changes(@version)) unless unreleased_changes?
+
+          choose_output
+        end
+
+        private
+
+        def choose_output
           if @options[:preview]
             print_version_changelog
           else
             save_version_changelog
           end
         end
-
-        private
 
         def changes_hash
           change_files_paths = Dir["#{UNRELEASED_LOGS_PATH}/*.yml"]
