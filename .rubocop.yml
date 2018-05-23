@@ -13,6 +13,9 @@ Metrics/LineLength:
 Style/WordArray:
   EnforcedStyle: brackets
 
+Style/GuardClause:
+  Enabled: false
+
 AllCops:
   Exclude:
     - codelog.gemspec
