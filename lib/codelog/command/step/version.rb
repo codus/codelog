@@ -81,15 +81,15 @@ module Codelog
         end
 
         def generate_file_content_from(changes_hash)
-          content = StringIO.new
-          content.puts "## #{Codelog::Config.version_tag(@version, @release_date)}"
+          file_content = StringIO.new
+          file_content.puts "## #{Codelog::Config.version_tag(@version, @release_date)}"
           changes_hash.each do |category, changes|
-            content.puts "### #{category}"
-            add_entry(content, changes)
-            content.puts "\n"
+            file_content.puts "### #{category}"
+            add_entry(file_content, changes)
+            file_content.puts "\n"
           end
-          content.puts "---\n"
-          content.string
+          file_content.puts "---\n"
+          file_content.string
         end
 
         def version_exists?
