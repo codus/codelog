@@ -18,39 +18,47 @@ describe Codelog::Command::Bump do
     end
 
     context 'with valid parameters' do
+      context 'without the \'preview\' option' do
+        context 'when it receives the \'major\' argument' do
+          it 'calls the release command with the version\'s major' do
+            subject.run 'major', '12-12-2012', preview: false
+            expect(Codelog::Command::Release).to have_received(:run).with('2.0.0', '12-12-2012', preview: false)
+          end
+        end
 
-      context 'when it receives the \'major\' argument' do
-        it 'calls the release command with the version\'s major' do
-          subject.run 'major', '12-12-2012', preview: false
-          expect(Codelog::Command::Release).to have_received(:run).with('2.0.0', '12-12-2012', preview: false)
+        context 'when it receives the \'minor\' argument' do
+          it 'increments the version\'s minor' do
+            subject.run 'minor', '12-12-2012', preview: false
+
+            expect(Codelog::Command::Release).to have_received(:run).with('1.3.0', '12-12-2012', preview: false)
+          end
+        end
+
+        context 'when it receives the \'patch\' argument' do
+          it 'increments the version\'s patch' do
+            subject.run 'patch', '12-12-2012', preview: false
+
+            expect(Codelog::Command::Release).to have_received(:run).with('1.2.4', '12-12-2012', preview: false)
+          end
+        end
+
+        context 'when there is no previous release' do
+          before do
+            allow(Dir).to receive(:glob).and_return([])
+          end
+
+          it 'calls the release command bumping from the 0.0.0 version' do
+            subject.run 'minor', '12-12-2012', preview: false
+
+            expect(Codelog::Command::Release).to have_received(:run).with('0.1.0', '12-12-2012', preview: false)
+          end
         end
       end
+      context "with the \'preview\' option" do
+        it 'calls the release command passing the next version and the preview option' do
+          subject.run 'major', '12-12-2012', preview: true
 
-      context 'when it receives the \'minor\' argument' do
-        it 'increments the version\'s minor' do
-          subject.run 'minor', '12-12-2012', preview: false
-
-          expect(Codelog::Command::Release).to have_received(:run).with('1.3.0', '12-12-2012', preview: false)
-        end
-      end
-
-      context 'when it receives the \'patch\' argument' do
-        it 'increments the version\'s patch' do
-          subject.run 'patch', '12-12-2012', preview: false
-
-          expect(Codelog::Command::Release).to have_received(:run).with('1.2.4', '12-12-2012', preview: false)
-        end
-      end
-
-      context 'when there is no previous release' do
-        before do
-          allow(Dir).to receive(:glob).and_return([])
-        end
-
-        it 'calls the release command bumping from the 0.0.0 version' do
-          subject.run 'minor', '12-12-2012', preview: false
-
-          expect(Codelog::Command::Release).to have_received(:run).with('0.1.0', '12-12-2012', preview: false)
+          expect(Codelog::Command::Release).to have_received(:run).with('2.0.0', '12-12-2012', preview: true)
         end
       end
     end
