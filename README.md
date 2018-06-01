@@ -112,7 +112,7 @@ Sometimes, you just want to check the developed changes, or preview how the next
 ``` bash
 $ codelog release 1.0.0 --preview
 ```
-Will display a preview of your changes on your console as if the version **1.0.0** has been released. **This feature does not support windows´s cmd.**
+Will display a preview of your changes on your console as if the version **1.0.0** has been released.
 
 ## Configuring
 
