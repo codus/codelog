@@ -37,21 +37,9 @@ module Codelog
 
         def choose_output
           if @options[:preview]
-            print_version_changelog
+            Codelog::Output::Log.print(generate_file_content_from(changes_hash))
           else
-            save_version_changelog
-          end
-        end
-
-        def print_version_changelog
-          IO.popen('less', 'w') { |output| output.puts generate_file_content_from(changes_hash) }
-        end
-
-        def save_version_changelog
-          chdir Dir.pwd do
-            File.open("#{RELEASES_PATH}/#{@version}.md", 'a') do |line|
-              line.puts generate_file_content_from(changes_hash)
-            end
+            Codelog::Output::ReleaseFile.print(generate_file_content_from(changes_hash) ,"#{RELEASES_PATH}/#{@version}.md")
           end
         end
 

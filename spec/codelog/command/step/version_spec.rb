@@ -35,8 +35,8 @@ describe Codelog::Command::Step::Version do
       allow(YAML).to receive(:load_file).with('file_2.yml') { { 'Category_1' => ['value_2', { 'Subcategory_1' => 'value_3' } ] } }
       allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
       allow_any_instance_of(described_class).to receive(:config_file_exists?) { true }
-      allow(File).to receive(:open).with('changelogs/releases/1.2.3.md', 'a')
-                                    .and_yield(mocked_release_file)
+      allow(Codelog::Output::ReleaseFile).to receive(:print)
+      allow(Codelog::Output::Log).to receive(:print)
     end
 
     context "within normal run" do
@@ -81,23 +81,22 @@ describe Codelog::Command::Step::Version do
       end
 
       it 'dumps the release content into a file' do
-        allow(subject).to receive(:generate_file_content_from).and_return('Added new feature')
-
+        allow(subject).to receive(:generate_file_content_from).and_return('test')
         subject.run
 
-        expect(File).to have_received(:open).with('changelogs/releases/1.2.3.md', 'a')
-        expect(mocked_release_file).to have_received(:puts).with 'Added new feature'
+        expect(Codelog::Output::ReleaseFile).to have_received(:print).with('test', 'changelogs/releases/1.2.3.md')
       end
 
       context 'with the preview option' do
         subject { described_class.new('1.2.3', '2012-12-12', preview: true) }
 
         it 'prints the release content on the console' do
-          allow(IO).to receive(:popen)
+          allow(Codelog::Output::Log).to receive(:print)
 
+          allow(subject).to receive(:generate_file_content_from).and_return('test')
           subject.run
 
-          expect(IO).to have_received(:popen).with('less', 'w')
+          expect(Codelog::Output::Log).to have_received(:print).with('test')
         end
       end
     end
@@ -173,7 +172,7 @@ describe Codelog::Command::Step::Version do
     before(:each) do
       allow(File).to receive(:open).and_call_original
       allow(File).to receive(:open).with('changelogs/releases/1.2.3.md', 'a')
-                                    .and_yield(mocked_release_file)
+                                   .and_yield(mocked_release_file)
       allow(mocked_release_file).to receive(:puts)
     end
 
