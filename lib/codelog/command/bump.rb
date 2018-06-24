@@ -15,7 +15,11 @@ module Codelog
           abort(Codelog::Message::Error.invalid_version_type(version_type))
         end
 
-        Codelog::Command::Release.run(next_version(version_type), release_date, options)
+        if options[:preview]
+          Codelog::Command::Preview.run(next_version(version_type), release_date)
+        else
+          Codelog::Command::Release.run(next_version(version_type), release_date)
+        end
       end
 
       private

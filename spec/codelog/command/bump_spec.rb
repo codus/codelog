@@ -22,7 +22,7 @@ describe Codelog::Command::Bump do
         context 'when it receives the \'major\' argument' do
           it 'calls the release command with the version\'s major' do
             subject.run 'major', '12-12-2012', preview: false
-            expect(Codelog::Command::Release).to have_received(:run).with('2.0.0', '12-12-2012', preview: false)
+            expect(Codelog::Command::Release).to have_received(:run).with('2.0.0', '12-12-2012')
           end
         end
 
@@ -30,7 +30,7 @@ describe Codelog::Command::Bump do
           it 'increments the version\'s minor' do
             subject.run 'minor', '12-12-2012', preview: false
 
-            expect(Codelog::Command::Release).to have_received(:run).with('1.3.0', '12-12-2012', preview: false)
+            expect(Codelog::Command::Release).to have_received(:run).with('1.3.0', '12-12-2012')
           end
         end
 
@@ -38,7 +38,7 @@ describe Codelog::Command::Bump do
           it 'increments the version\'s patch' do
             subject.run 'patch', '12-12-2012', preview: false
 
-            expect(Codelog::Command::Release).to have_received(:run).with('1.2.4', '12-12-2012', preview: false)
+            expect(Codelog::Command::Release).to have_received(:run).with('1.2.4', '12-12-2012')
           end
         end
 
@@ -50,15 +50,16 @@ describe Codelog::Command::Bump do
           it 'calls the release command bumping from the 0.0.0 version' do
             subject.run 'minor', '12-12-2012', preview: false
 
-            expect(Codelog::Command::Release).to have_received(:run).with('0.1.0', '12-12-2012', preview: false)
+            expect(Codelog::Command::Release).to have_received(:run).with('0.1.0', '12-12-2012')
           end
         end
       end
       context "with the \'preview\' option" do
-        it 'calls the release command passing the next version and the preview option' do
+        it 'calls the preview command passing the next version and the preview date' do
+          allow(Codelog::Command::Preview).to receive(:run)
           subject.run 'major', '12-12-2012', preview: true
 
-          expect(Codelog::Command::Release).to have_received(:run).with('2.0.0', '12-12-2012', preview: true)
+          expect(Codelog::Command::Preview).to have_received(:run).with('2.0.0', '12-12-2012')
         end
       end
     end

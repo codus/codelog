@@ -49,7 +49,7 @@ describe Codelog::Command::Step::Version do
       end
 
       it 'merges the content of the files with the same category' do
-        expect(subject).to receive(:generate_file_content_from)
+        expect(subject).to receive(:generate_changelog_content_from)
           .with('Category_1' => ['value_1', 'value_2', { 'Subcategory_1' => 'value_3' }])
         subject.run
       end
@@ -69,35 +69,13 @@ describe Codelog::Command::Step::Version do
       end
 
       it 'checks the existence of an already existing version of the release' do
-        allow(subject).to receive(:save_version_changelog)
         expect(subject).to receive(:version_exists?)
         subject.run
       end
 
       it 'checks the existence of change files' do
-        allow(subject).to receive(:save_version_changelog)
         expect(subject).to receive(:unreleased_changes?)
         subject.run
-      end
-
-      it 'dumps the release content into a file' do
-        allow(subject).to receive(:generate_file_content_from).and_return('test')
-        subject.run
-
-        expect(Codelog::Output::ReleaseFile).to have_received(:print).with('test', 'changelogs/releases/1.2.3.md')
-      end
-
-      context 'with the preview option' do
-        subject { described_class.new('1.2.3', '2012-12-12', preview: true) }
-
-        it 'prints the release content on the console' do
-          allow(Codelog::Output::Log).to receive(:print)
-
-          allow(subject).to receive(:generate_file_content_from).and_return('test')
-          subject.run
-
-          expect(Codelog::Output::Log).to have_received(:print).with('test')
-        end
       end
     end
 
@@ -106,7 +84,6 @@ describe Codelog::Command::Step::Version do
         before :each do
           allow(File).to receive(:file?).with('changelogs/releases/.md').and_return(false)
           allow(subject).to receive(:unreleased_changes?).and_return(true)
-          allow(subject).to receive(:save_version_changelog)
           allow(Codelog::Config).to receive(:version_tag)
             .with(nil, '2012-12-12')
         end
@@ -123,7 +100,6 @@ describe Codelog::Command::Step::Version do
       describe 'with an already existing version' do
         before do
           allow(subject).to receive(:version_exists?).and_return(true)
-          allow(subject).to receive(:save_version_changelog)
           allow(Codelog::Config).to receive(:version_tag)
             .with('1.2.3', '2012-12-12')
         end
@@ -137,7 +113,6 @@ describe Codelog::Command::Step::Version do
       describe 'with no changes to be released' do
         before :each do
           allow(File).to receive(:file?).and_return(false)
-          allow(subject).to receive(:save_version_changelog)
           allow(Dir).to receive(:"[]").with('changelogs/unreleased/*.yml').and_return([])
           allow(Codelog::Config).to receive(:version_tag)
             .with('1.2.3', '2012-12-12')
@@ -153,12 +128,6 @@ describe Codelog::Command::Step::Version do
   end
 
   describe '.run' do
-    let(:mocked_release_file) { double(File) }
-    before(:each) do
-      allow(File).to receive(:open).and_yield(mocked_release_file)
-      allow(mocked_release_file).to receive(:puts)
-    end
-
     it 'creates an instance of the class to run the command' do
       allow_any_instance_of(described_class).to receive(:config_file_exists?) { true }
       allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
@@ -168,16 +137,8 @@ describe Codelog::Command::Step::Version do
   end
 
   describe '#changes_hash' do
-    let(:mocked_release_file) { double(File) }
-    before(:each) do
-      allow(File).to receive(:open).and_call_original
-      allow(File).to receive(:open).with('changelogs/releases/1.2.3.md', 'a')
-                                   .and_yield(mocked_release_file)
-      allow(mocked_release_file).to receive(:puts)
-    end
-
     context "when a non parseable yml file is given" do
-      subject {described_class.new('1.2.3', '2012-12-12')}
+      subject { described_class.new('1.2.3', '2012-12-12') }
 
       it 'aborts with the appropriate message' do
         allow(Dir).to receive(:"[]") { ["spec/fixtures/files/not_parseable.yml"] }

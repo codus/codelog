@@ -39,10 +39,9 @@ describe Codelog::CLI do
   describe '#release' do
     context 'passing the version as an argument' do
       it 'calls the release command' do
-        default_options = {}
         allow(Codelog::Command::Release).to receive(:run)
         subject.release '1.2.3', '2012-12-12'
-        expect(Codelog::Command::Release).to have_received(:run).with '1.2.3', '2012-12-12', default_options
+        expect(Codelog::Command::Release).to have_received(:run).with '1.2.3', '2012-12-12'
       end
     end
   end
