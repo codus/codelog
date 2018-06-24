@@ -1,7 +1,6 @@
 module Codelog
   module Output
     class ReleaseFile
-
       def initialize(file_path)
         @file_path = file_path
       end
