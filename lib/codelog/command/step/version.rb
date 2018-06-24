@@ -15,7 +15,6 @@ module Codelog
           abort(Codelog::Message::Error.missing_config_file) unless config_file_exists?
           @version = version
           @release_date = Date.strptime(release_date, Codelog::Config.date_input_format).to_s
-
         rescue ArgumentError
           abort(Codelog::Message::Error.invalid_date_format)
         end

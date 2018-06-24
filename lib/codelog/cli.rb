@@ -21,7 +21,8 @@ module Codelog
     desc 'release [VERSION] <RELEASE_DATE>', 'Generate new release updating changelog'
     method_option :preview, desc: 'Prints the preview of the specified version release',
                             aliases: ['-p', '--preview'], type: :boolean
-    def release(version_number, release_date = Date.today.strftime(Codelog::Config.date_input_format))
+    def release(version_number,
+                release_date = Date.today.strftime(Codelog::Config.date_input_format))
       if options[:preview]
         Codelog::Command::Preview.run version_number, release_date
       else

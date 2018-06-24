@@ -2,7 +2,7 @@ module Codelog
   module Output
     class ReleaseFile
       def self.print(content, file_path)
-        self.new.print(content, file_path)
+        new.print(content, file_path)
       end
 
       def print(content, file_path)

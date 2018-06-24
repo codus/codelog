@@ -2,7 +2,7 @@ module Codelog
   module Output
     class Log
       def self.print(content)
-        self.new.print(content)
+        new.print(content)
       end
 
       def print(content)
