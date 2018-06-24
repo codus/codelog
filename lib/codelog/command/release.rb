@@ -1,8 +1,6 @@
 module Codelog
   module Command
     class Release
-      include FileUtils
-
       RELEASES_PATH = 'changelogs/releases'.freeze
 
       def self.run(version_number, release_date)
