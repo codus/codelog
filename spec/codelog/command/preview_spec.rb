@@ -8,8 +8,8 @@ describe Codelog::Command::Preview do
       allow(Codelog::Output::Log).to receive(:print)
     end
 
-    it 'does a thing ae' do
-      expect(Codelog::Command::Step::Version).to receive(:run)
+    it 'calls the log outputter to print a preview of the desired version' do
+      expect(Codelog::Command::Step::Version).to receive(:run).with '1.2.3', '2012-12-12'
       expect(Codelog::Output::Log).to receive(:print).with('test')
 
       subject
