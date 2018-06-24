@@ -1,13 +1,18 @@
 module Codelog
   module Output
     class ReleaseFile
-      def self.print(content, file_path)
-        new.print(content, file_path)
+
+      def initialize(file_path)
+        @file_path = file_path
       end
 
-      def print(content, file_path)
+      def self.print(content, file_path)
+        new(file_path).print(content)
+      end
+
+      def print(content)
         Dir.chdir Dir.pwd do
-          File.open(file_path, 'a') do |line|
+          File.open(@file_path, 'a') do |line|
             line.puts content
           end
         end

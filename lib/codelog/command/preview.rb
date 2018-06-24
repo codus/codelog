@@ -6,8 +6,8 @@ module Codelog
       end
 
       def run(version_number, release_date)
-        content = Codelog::Command::Step::Version.run version_number, release_date
-        Codelog::Output::Log.print content
+        outputter = Codelog::Output::Log.new
+        Codelog::Command::Step::Version.run version_number, release_date, outputter
       end
     end
   end

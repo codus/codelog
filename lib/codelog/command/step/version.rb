@@ -11,16 +11,17 @@ module Codelog
         CONFIG_FILE_PATH = 'changelogs/codelog.yml'.freeze
         RELEASES_PATH = 'changelogs/releases'.freeze
 
-        def initialize(version, release_date)
+        def initialize(version, release_date, outputter)
           abort(Codelog::Message::Error.missing_config_file) unless config_file_exists?
           @version = version
           @release_date = Date.strptime(release_date, Codelog::Config.date_input_format).to_s
+          @outputter = outputter
         rescue ArgumentError
           abort(Codelog::Message::Error.invalid_date_format)
         end
 
-        def self.run(version, release_date)
-          Codelog::Command::Step::Version.new(version, release_date).run
+        def self.run(version, release_date, outputter)
+          Codelog::Command::Step::Version.new(version, release_date, outputter).run
         end
 
         def run
@@ -28,7 +29,7 @@ module Codelog
           abort(Codelog::Message::Error.already_existing_version(@version)) if version_exists?
           abort(Codelog::Message::Error.no_detected_changes(@version)) unless unreleased_changes?
 
-          generate_changelog_content_from(changes_hash)
+          @outputter.print generate_changelog_content_from(changes_hash)
         end
 
         private
