@@ -18,4 +18,12 @@ describe Codelog::Output::Log do
       expect(mocked_stdout).to have_received(:puts).with(content)
     end
   end
+
+  describe '.print' do
+    subject { described_class.print(content) }
+    it 'creates an instance of the class to run the command' do
+      expect_any_instance_of(described_class).to receive(:print).with 'test'
+      described_class.print 'test'
+    end
+  end
 end

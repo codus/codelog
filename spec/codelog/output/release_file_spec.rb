@@ -19,4 +19,12 @@ describe Codelog::Output::ReleaseFile do
       expect(mocked_file).to have_received(:puts).with(file_content)
     end
   end
+
+  describe '.print' do
+    subject { described_class.print(content, file_path) }
+    it 'creates an instance of the class to run the command' do
+      expect_any_instance_of(described_class).to receive(:print).with 'test', 'codus/codelog'
+      described_class.print 'test', 'codus/codelog'
+    end
+  end
 end
