@@ -7,33 +7,44 @@ module Codelog
     module Step
       class Version
         include FileUtils
-
-        RELEASES_PATH = 'changelogs/releases'.freeze
         UNRELEASED_LOGS_PATH = 'changelogs/unreleased'.freeze
         CONFIG_FILE_PATH = 'changelogs/codelog.yml'.freeze
+        RELEASES_PATH = 'changelogs/releases'.freeze
 
-        def initialize(version, release_date)
+        def initialize(version, release_date, outputter)
           abort(Codelog::Message::Error.missing_config_file) unless config_file_exists?
           @version = version
           @release_date = Date.strptime(release_date, Codelog::Config.date_input_format).to_s
+          @outputter = outputter
         rescue ArgumentError
           abort(Codelog::Message::Error.invalid_date_format)
         end
 
-        def self.run(version, release_date)
-          Codelog::Command::Step::Version.new(version, release_date).run
+        def self.run(version, release_date, outputter)
+          Codelog::Command::Step::Version.new(version, release_date, outputter).run
         end
 
         def run
           abort(Codelog::Message::Error.missing_version_number) if @version.nil?
           abort(Codelog::Message::Error.already_existing_version(@version)) if version_exists?
           abort(Codelog::Message::Error.no_detected_changes(@version)) unless unreleased_changes?
-          chdir Dir.pwd do
-            create_version_changelog_from changes_hash
-          end
+
+          @outputter.print generate_changelog_content_from(changes_hash)
         end
 
         private
+
+        def generate_changelog_content_from(changes_hash)
+          file_content = StringIO.new
+          file_content.puts "## #{Codelog::Config.version_tag(@version, @release_date)}"
+          changes_hash.each do |category, changes|
+            file_content.puts "### #{category}"
+            add_entry(file_content, changes)
+            file_content.puts "\n"
+          end
+          file_content.puts "---\n"
+          file_content.string
+        end
 
         def changes_hash
           change_files_paths = Dir["#{UNRELEASED_LOGS_PATH}/*.yml"]
@@ -57,18 +68,6 @@ module Codelog
             changes.each { |change| add_entry(line, change, level) }
           else
             line.puts "#{"\t" * level}- #{changes}"
-          end
-        end
-
-        def create_version_changelog_from(changes_hash)
-          File.open("#{RELEASES_PATH}/#{@version}.md", 'a') do |line|
-            line.puts "## #{Codelog::Config.version_tag(@version, @release_date)}"
-            changes_hash.each do |category, changes|
-              line.puts "### #{category}"
-              add_entry(line, changes)
-              line.puts "\n"
-            end
-            line.puts "---\n"
           end
         end
 

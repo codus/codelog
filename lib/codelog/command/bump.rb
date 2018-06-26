@@ -6,16 +6,20 @@ module Codelog
       VALID_VERSION_TYPES = ['major', 'minor', 'patch'].freeze
       INITIAL_RELEASE_VERSION = '0.0.0'.freeze
 
-      def self.run(version_type, release_date)
-        Codelog::Command::Bump.new.run version_type, release_date
+      def self.run(version_type, release_date, options)
+        Codelog::Command::Bump.new.run version_type, release_date, options
       end
 
-      def run(version_type, release_date)
+      def run(version_type, release_date, options)
         unless VALID_VERSION_TYPES.include?(version_type.downcase)
           abort(Codelog::Message::Error.invalid_version_type(version_type))
         end
 
-        Codelog::Command::Release.run(next_version(version_type), release_date)
+        if options[:preview]
+          Codelog::Command::Preview.run(next_version(version_type), release_date)
+        else
+          Codelog::Command::Release.run(next_version(version_type), release_date)
+        end
       end
 
       private

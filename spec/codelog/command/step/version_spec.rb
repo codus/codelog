@@ -1,32 +1,33 @@
 require 'spec_helper'
 
 describe Codelog::Command::Step::Version do
+  let(:outputter) { double(:mocked_outputter) }
+  before(:each) { allow(outputter).to receive(:print) }
+
   describe '#new' do
     it 'aborts when date format differs than the provided one' do
       allow_any_instance_of(described_class).to receive(:config_file_exists?) { true }
       allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
       expect_any_instance_of(described_class).to receive(:abort).with Codelog::Message::Error.invalid_date_format
-      described_class.new '1.2.4', '2012/12/12'
+      described_class.new('1.2.4', '2012/12/12', outputter)
     end
 
     context 'when config file is not provided' do
-      around(:each) do |example|
-        File.rename(described_class::CONFIG_FILE_PATH, "#{described_class::CONFIG_FILE_PATH}.fake")
-        example.run
-        File.rename("#{described_class::CONFIG_FILE_PATH}.fake", described_class::CONFIG_FILE_PATH)
+      before(:each) do
+        allow_any_instance_of(described_class).to receive(:config_file_exists?) { false }
       end
 
       it 'aborts with the appropriate message' do
         expect_any_instance_of(described_class).to receive(:abort).with Codelog::Message::Error.missing_config_file
-        described_class.new '1.2.3', '2012-12-31'
+        described_class.new('1.2.3', '2012-12-31', outputter)
       end
     end
   end
 
   describe '#run' do
-    subject { described_class.new('1.2.3', '2012-12-12') }
+    subject { described_class.new('1.2.3', '2012-12-12', outputter) }
 
-    let(:mocked_release_file) { double(File) }
+    let(:mocked_string_io) { double(StringIO) }
 
     before :each do
       allow(Dir).to receive(:"[]").with('changelogs/unreleased/*.yml') do
@@ -47,31 +48,39 @@ describe Codelog::Command::Step::Version do
       end
 
       it 'merges the content of the files with the same category' do
-        expect(subject).to receive(:create_version_changelog_from)
+        expect(subject).to receive(:generate_changelog_content_from)
           .with('Category_1' => ['value_1', 'value_2', { 'Subcategory_1' => 'value_3' }])
         subject.run
       end
 
-      it 'creates a release using the unreleased changes' do
-        allow(mocked_release_file).to receive(:puts)
-        allow(File).to receive(:open).with('changelogs/releases/1.2.3.md', 'a')
-                                     .and_yield(mocked_release_file)
+      it 'generates the release content using the unreleased changes' do
+        allow(StringIO).to receive(:new).and_return mocked_string_io
+        allow(mocked_string_io).to receive(:puts)
+        allow(mocked_string_io).to receive(:string)
+
         subject.run
-        expect(mocked_release_file).to have_received(:puts).with '## 1.2.3 2012-12-12'
-        expect(mocked_release_file).to have_received(:puts).with '### Category_1'
-        expect(mocked_release_file).to have_received(:puts).with '- Subcategory_1'
-        expect(mocked_release_file).to have_received(:puts).with "\t- value_3"
+
+        expect(mocked_string_io).to have_received(:puts).with '## 1.2.3 2012-12-12'
+        expect(mocked_string_io).to have_received(:puts).with '### Category_1'
+        expect(mocked_string_io).to have_received(:puts).with '- Subcategory_1'
+        expect(mocked_string_io).to have_received(:puts).with "\t- value_3"
+        expect(mocked_string_io).to have_received(:string)
       end
 
       it 'checks the existence of an already existing version of the release' do
-        allow(subject).to receive(:create_version_changelog_from)
         expect(subject).to receive(:version_exists?)
         subject.run
       end
 
       it 'checks the existence of change files' do
-        allow(subject).to receive(:create_version_changelog_from)
         expect(subject).to receive(:unreleased_changes?)
+        subject.run
+      end
+
+      it 'calls the print method on the passed outputter' do
+        allow_any_instance_of(described_class).to receive(:generate_changelog_content_from).and_return('test')
+        expect(outputter).to receive(:print).with('test')
+
         subject.run
       end
     end
@@ -81,12 +90,10 @@ describe Codelog::Command::Step::Version do
         before :each do
           allow(File).to receive(:file?).with('changelogs/releases/.md').and_return(false)
           allow(subject).to receive(:unreleased_changes?).and_return(true)
-          allow(subject).to receive(:create_version_changelog_from)
-          allow(Codelog::Config).to receive(:version_tag)
-            .with(nil, '2012-12-12')
+          allow(Codelog::Config).to receive(:version_tag).with(nil, '2012-12-12')
         end
 
-        subject { described_class.new(nil, '2012-12-12') }
+        subject { described_class.new(nil, '2012-12-12', outputter) }
 
         it 'aborts with the appropriate error message' do
           expect(subject).to receive(:abort).with Codelog::Message::Error.missing_version_number
@@ -98,9 +105,7 @@ describe Codelog::Command::Step::Version do
       describe 'with an already existing version' do
         before do
           allow(subject).to receive(:version_exists?).and_return(true)
-          allow(subject).to receive(:create_version_changelog_from)
-          allow(Codelog::Config).to receive(:version_tag)
-            .with('1.2.3', '2012-12-12')
+          allow(Codelog::Config).to receive(:version_tag).with('1.2.3', '2012-12-12')
         end
 
         it 'aborts with the appropriate error message' do
@@ -112,10 +117,8 @@ describe Codelog::Command::Step::Version do
       describe 'with no changes to be released' do
         before :each do
           allow(File).to receive(:file?).and_return(false)
-          allow(subject).to receive(:create_version_changelog_from)
           allow(Dir).to receive(:"[]").with('changelogs/unreleased/*.yml').and_return([])
-          allow(Codelog::Config).to receive(:version_tag)
-            .with('1.2.3', '2012-12-12')
+          allow(Codelog::Config).to receive(:version_tag).with('1.2.3', '2012-12-12')
         end
 
         it 'aborts with the appropriate error message' do
@@ -132,14 +135,13 @@ describe Codelog::Command::Step::Version do
       allow_any_instance_of(described_class).to receive(:config_file_exists?) { true }
       allow(Codelog::Config).to receive(:date_input_format) { '%Y-%m-%d' }
       expect_any_instance_of(described_class).to receive(:run)
-      described_class.run '1.2.3', '2012-12-12'
+      described_class.run('1.2.4', '2012-12-12', outputter)
     end
   end
 
-
   describe '#changes_hash' do
     context "when a non parseable yml file is given" do
-      subject {described_class.new('1.2.3', '2012-12-12')}
+      subject { described_class.new('1.2.3', '2012-12-12', outputter) }
 
       it 'aborts with the appropriate message' do
         allow(Dir).to receive(:"[]") { ["spec/fixtures/files/not_parseable.yml"] }
