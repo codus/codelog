@@ -76,9 +76,9 @@ After the initial setup every time a change is made, the developer should run th
 $ codelog new <NAME>
 ```
 
-This will generate a change file, in `YAML` format, on `changelogs/unreleased/` from the `template.yml`, named with a timestamp value followed by the the given `NAME`, converted to snake case, or the default name(`change`).
+This will generate a change file, in `YAML` format, on `changelogs/unreleased/` from the `template.yml`, named with a timestamp value followed by the given `NAME`, converted to snake case, or the default name(`change`).
 
-The new change file should be filled with informations about the implemented change, all unused topics should be erased and the file committed.
+The new change file should be filled with information about the implemented change, all unused topics should be erased and the file committed.
 
 Additionally, you can pass some extra options to the `new` command. Type `codelog help new` in your console for more information.
 
@@ -95,7 +95,7 @@ No conflicts to resolve. All changes documented.
 
 It will execute 3 steps:
 
-- Generate a new release file at `changelogs/releases/` by merging all change files at `changelogs/unreleased/`
+- Generates a new release file at `changelogs/releases/` by merging all change files at `changelogs/unreleased/`
 - Deletes the change files at `changelogs/unreleased/` because they now compose the new release. If it was not deleted, the change would appear repeated in the next release.
 - Updates the `CHANGELOG.md` file by merging all the releases at `changelogs/releases/`.
 
@@ -107,7 +107,7 @@ Where the first mandatory parameter is the desired release type, i.e: If you don
 
 ### Preview a Release
 
-Sometimes, you just want to check the developed changes, or preview how the next release will look like, to do so, you can pass the `[-p|--preview]` option on the `release` and `bump` commands. For instance, the following:
+Sometimes, you just want to check the developed changes or preview how the next release will look like. To do so, you can pass the `[-p|--preview]` option on the `release` and `bump` commands. For instance, the following:
 
 ``` bash
 $ codelog release 1.0.0 --preview
