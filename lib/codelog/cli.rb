@@ -38,5 +38,10 @@ module Codelog
                 Date.today.strftime(Codelog::Config.date_input_format))
       Codelog::Command::Bump.run version_type, release_date, options
     end
+
+    desc 'regenerate', "Re-generates the CHANGELOG, based on the existing releases.\nThis is useful when you want to do some minor fixes after a new version release"
+    def regenerate
+      Codelog::Command::Regenerate.run
+    end
   end
 end
