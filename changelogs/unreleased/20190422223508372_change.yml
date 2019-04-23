@@ -1,0 +1,2 @@
+"Added":
+  - "Command `codelog regenerate` that re-generates the CHANGELOG based on the existing releases"
