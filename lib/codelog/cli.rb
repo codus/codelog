@@ -4,6 +4,13 @@ require 'yaml'
 
 module Codelog
   class CLI < Thor
+    map ['--version', '-v'] => :__print_version
+
+    desc '[--version, -v]', 'prints current codelog version'
+    def __print_version
+      puts "Codelog version #{Codelog::VERSION}"
+    end
+
     desc 'setup', 'Generate the changelogs folder structure and the template.yml file'
     def setup
       Codelog::Command::Setup.run
