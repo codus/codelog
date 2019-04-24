@@ -38,5 +38,11 @@ module Codelog
                 Date.today.strftime(Codelog::Config.date_input_format))
       Codelog::Command::Bump.run version_type, release_date, options
     end
+
+    desc 'preview <VERSION> <RELEASE_DATE>', 'Prints the preview of the next release'
+    def preview(version_number="x.x.x",
+                release_date = Date.today.strftime(Codelog::Config.date_input_format))
+      Codelog::Command::Preview.run version_number, release_date
+    end
   end
 end
