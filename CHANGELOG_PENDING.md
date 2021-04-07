@@ -1,0 +1,5 @@
+## Pending Changes
+### Added
+- Ability to create a pending changelog for unreleased changes
+
+---

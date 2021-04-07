@@ -13,6 +13,7 @@ module Codelog
         def run
           chdir Dir.pwd do
             system('rm -rv changelogs/unreleased/*.yml')
+            system("> #{Codelog::Config.pending_filename}")
           end
         end
       end

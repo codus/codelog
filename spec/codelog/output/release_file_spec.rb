@@ -15,7 +15,7 @@ describe Codelog::Output::ReleaseFile do
     it 'prints the passed content in a file on the passed path' do
       subject
 
-      expect(File).to have_received(:open).with(file_path, 'a')
+      expect(File).to have_received(:open).with(file_path, 'w+')
       expect(mocked_file).to have_received(:puts).with(file_content)
     end
   end

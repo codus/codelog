@@ -2,6 +2,8 @@
 
 header_textfile: changelogs/header.txt
 default_changelog_filename: CHANGELOG.md
+default_pending_changelog_filename: CHANGELOG_PENDING.md
+default_pending_changelog_title: "Pending Changes"
 
 # Tag formatting  ---------------------------------------------------
 

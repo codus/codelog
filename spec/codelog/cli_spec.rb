@@ -43,6 +43,14 @@ describe Codelog::CLI do
         subject.release '1.2.3', '2012-12-12'
         expect(Codelog::Command::Release).to have_received(:run).with '1.2.3', '2012-12-12'
       end
+
+  describe '#pending' do
+    context 'passing the title as an argument' do
+      it 'calls the pending command' do
+        allow(Codelog::Command::Pending).to receive(:run)
+        subject.pending 'Pending Changes'
+        expect(Codelog::Command::Pending).to have_received(:run).with 'Pending Changes'
+      end
     end
   end
 
