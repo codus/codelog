@@ -114,6 +114,16 @@ $ codelog release 1.0.0 --preview
 ```
 Will display a preview of your changes on your console as if the version **1.0.0** has been released.
 
+### Generate a Pending Releases Changelog
+
+You may find yourself wanting a single markdown file of all your unreleased changes, whether it be for testing purposes or as a list of changes coming soon. The `pending` command does that for you.
+
+```bash
+$ codelog pending <TITLE>
+```
+
+`TITLE` is an option argument that is effectively the "Version" pending. The default value is `Pending Changes`.
+
 ## Configuring
 
 Since version 0.3.0, there are a few configurations that are possible. You can choose:
