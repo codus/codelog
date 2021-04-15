@@ -7,6 +7,7 @@ module Codelog
 
       def run
         Codelog::Command::Step::Changelog.run
+        puts "The CHANGELOG was regenerated successfully!"
       end
     end
   end
