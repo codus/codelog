@@ -4,10 +4,10 @@ require 'yaml'
 
 module Codelog
   class CLI < Thor
-    map ['--version', '-v'] => :__print_version
+    map ['--version', '-v'] => :print_codelog_version
 
-    desc '[--version, -v]', 'prints current codelog version'
-    def __print_version
+    desc '[--version, -v]', 'prints current version of the codelog gem'
+    def print_codelog_version
       puts "Codelog version #{Codelog::VERSION}"
     end
 
