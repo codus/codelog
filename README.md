@@ -5,7 +5,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/maintainability)](https://codeclimate.com/github/codus/codelog/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/6f5885536c6b5c82f304/test_coverage)](https://codeclimate.com/github/codus/codelog/test_coverage)
 
-A gem to help big teams manage their chagelogs.
+A gem to help big teams manage their changelogs.
 
 When many people are developing changes to compose one product release, there can be some conflicts on merging the changes added to the Changelog. These conflicts can be badly resolved by git, which could cause the loss of important release notes.
 
@@ -96,7 +96,7 @@ Where the `VERSION` is mandatory and represents the number of the next version o
 This command will execute 3 steps:
 
 - Generates a new release file at `changelogs/releases/` by merging all change files at `changelogs/unreleased/`
-- Deletes the change files at `changelogs/unreleased/` because they now compose the new release.(if these files are not deleted, the same changes would appear in the next release.
+- Deletes the change files at `changelogs/unreleased/` because they now compose the new release.(Otherwise, the same changes would appear in the next release).
 - Updates the `CHANGELOG.md` file by merging all the releases at `changelogs/releases/`.
 
 If you don't want to specify the release version manually, you can use the `bump` command:
