@@ -53,6 +53,14 @@ describe Codelog::CLI do
     end
   end
 
+  describe '#regenerate' do
+    it 'calls the regenerate command' do
+        allow(Codelog::Command::Regenerate).to receive(:run)
+        subject.regenerate
+        expect(Codelog::Command::Regenerate).to have_received(:run)
+    end
+  end
+
   describe '#pending' do
     context 'passing the title as an argument' do
       it 'calls the pending command' do
