@@ -37,13 +37,19 @@ module Codelog
       Codelog::Command::Pending.run title
     end
 
-    desc 'bump [VERSION_TYPE] <RELEASE_DATE>', 'Bumps the next version,
-     being it major, minor or patch'
+    desc 'bump [VERSION_TYPE] <RELEASE_DATE>', "Bumps the next version, \
+being it major, minor or patch"
     method_option :preview, desc: 'Prints the preview of the next version',
                             aliases: ['-p', '--preview'], type: :boolean
     def bump(version_type, release_date =
                 Date.today.strftime(Codelog::Config.date_input_format))
       Codelog::Command::Bump.run version_type, release_date, options
+    end
+
+    desc 'regenerate', "Re-generates the CHANGELOG, based on the existing releases.\
+ This is useful when you want to do some minor fixes after a new version release"
+    def regenerate
+      Codelog::Command::Regenerate.run
     end
   end
 end
