@@ -9,12 +9,8 @@ module Codelog
         settings['default_changelog_filename'] || 'CHANGELOG.md'
       end
 
-      def pending_filename
-        settings['default_pending_changelog_filename'] || 'CHANGELOG_PENDING.md'
-      end
-
-      def pending_changelog_title
-        settings['default_pending_changelog_title'] || 'Pending Changes'
+      def pending_changes_title
+        settings['default_pending_changes_title'] || 'Pending Changes'
       end
 
       def header

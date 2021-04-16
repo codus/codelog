@@ -22,15 +22,9 @@ describe Codelog::Config do
     end
   end
 
-  describe '#pending_filename' do
-    it 'returns the correct pending filename' do
-      expect(described_class.pending_filename).to eq('CHANGELOG_PENDING.md')
-    end
-  end
-
-  describe '#pending_changelog_title' do
+  describe '#pending_changes_title' do
     it 'returns the correct pending changelog title' do
-      expect(described_class.pending_changelog_title).to eq('Pending Changes')
+      expect(described_class.pending_changes_title).to eq('Pending Changes')
     end
   end
 

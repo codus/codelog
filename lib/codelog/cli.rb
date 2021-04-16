@@ -33,7 +33,7 @@ module Codelog
     desc 'pending <TITLE>', 'Generate pending changelog from unreleased files'
     method_option :title, desc: 'Title to use for the unreleased changes section',
                           aliases: ['-t', '--title'], type: :string
-    def pending(title = Codelog::Config.pending_changelog_title)
+    def pending(title = Codelog::Config.pending_changes_title)
       Codelog::Command::Pending.run title
     end
 

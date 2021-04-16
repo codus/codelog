@@ -1,2 +1,3 @@
 "Added":
-  - Ability to create a pending changelog for unreleased changes
+  - Ability to include pending changes in changelog for unreleased changes
+  - Test for the release preview flag

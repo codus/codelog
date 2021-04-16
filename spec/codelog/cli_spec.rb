@@ -44,6 +44,15 @@ describe Codelog::CLI do
         expect(Codelog::Command::Release).to have_received(:run).with '1.2.3', '2012-12-12'
       end
 
+      it 'calls the release command with the preview flag' do
+        allow(Codelog::Command::Preview).to receive(:run)
+        subject.options = {preview: true}
+        subject.release '1.2.3', '2012-12-12'
+        expect(Codelog::Command::Preview).to have_received(:run).with '1.2.3', '2012-12-12'
+      end
+    end
+  end
+
   describe '#pending' do
     context 'passing the title as an argument' do
       it 'calls the pending command' do

@@ -9,7 +9,8 @@ describe Codelog::Command::Pending do
       allow(Codelog::Output::ReleaseFile).to receive(:new).and_return(mock_file_outputter)
 
       expect(Codelog::Command::Step::Version).to receive(:run).with('Pending Changes', Date.today.strftime(Codelog::Config.date_input_format), mock_file_outputter)
-      expect(subject).to receive(:puts).with("\n== Pending Changelog updated ==")
+      expect(Codelog::Command::Step::Changelog).to receive(:run)
+      expect(subject).to receive(:puts).with("\n== Pending changes added to changelog ==")
       subject.run 'Pending Changes'
     end
   end
