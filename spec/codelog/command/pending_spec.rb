@@ -4,7 +4,7 @@ describe Codelog::Command::Pending do
   describe '#run' do
     let(:mock_file_outputter) { double(Codelog::Output::ReleaseFile) }
 
-    it 'calls' do
+    it 'adds the pending changes to the changelog' do
       allow(Codelog::Command::Step::Version).to receive(:new)
       allow(Codelog::Output::ReleaseFile).to receive(:new).and_return(mock_file_outputter)
 
