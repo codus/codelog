@@ -13,6 +13,7 @@ module Codelog
         def run
           chdir Dir.pwd do
             system('rm -rv changelogs/unreleased/*.yml')
+            system('[ -f changelogs/releases/pending.md ] && rm -rv changelogs/releases/pending.md')
           end
         end
       end
