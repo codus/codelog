@@ -10,6 +10,8 @@ describe Codelog::Command::Step::Delete do
     it 'removes all the files from the unreleased folder' do
       expect(subject).to have_received(:system)
         .with('rm -rv changelogs/unreleased/*.yml')
+      expect(subject).to have_received(:system)
+        .with('[ -f changelogs/releases/pending.md ] && rm -rv changelogs/releases/pending.md')
     end
   end
 

@@ -22,7 +22,7 @@ module Codelog
           version_changelogs = Dir['changelogs/releases/*.md']
           version_changelogs.sort_by! do |file_name|
             version_number = file_name.split('/').last.chomp('.md')
-            Gem::Version.new(version_number)
+            version_number == 'pending' ? version_number : Gem::Version.new(version_number).to_s
           end.reverse!
           version_changelogs.inject([]) do |partial_changes, version_changelog|
             partial_changes + File.readlines(version_changelog)

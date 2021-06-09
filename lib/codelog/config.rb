@@ -9,6 +9,10 @@ module Codelog
         settings['default_changelog_filename'] || 'CHANGELOG.md'
       end
 
+      def pending_changes_title
+        settings['default_pending_changes_title'] || 'Pending Changes'
+      end
+
       def header
         File.open(settings['header_textfile'], 'r').read || ''
       end

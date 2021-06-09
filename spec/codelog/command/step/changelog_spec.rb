@@ -21,6 +21,7 @@ describe Codelog::Command::Step::Changelog do
 
     it 'creates a changelog file from the releases' do
       allow(mocked_changelog).to receive(:puts)
+      expect(File).to receive(:open).with('changelogs/header.txt', 'r').and_return(mocked_header_textfile)      
       expect(File).to receive(:open).with('CHANGELOG.md', 'w+').and_yield mocked_changelog
       subject.run
       expect(mocked_changelog).to have_received(:puts).with(['line_2\n', 'line_1\n'])

@@ -11,7 +11,7 @@ module Codelog
 
       def print(content)
         Dir.chdir Dir.pwd do
-          File.open(@file_path, 'a') do |line|
+          File.open(@file_path, 'w+') do |line|
             line.puts content
           end
         end

@@ -37,6 +37,13 @@ module Codelog
       end
     end
 
+    desc 'pending <TITLE>', 'Generate pending changelog from unreleased files'
+    method_option :title, desc: 'Title to use for the unreleased changes section',
+                          aliases: ['-t', '--title'], type: :string
+    def pending(title = Codelog::Config.pending_changes_title)
+      Codelog::Command::Pending.run title
+    end
+
     desc 'bump [VERSION_TYPE] <RELEASE_DATE>', "Bumps the next version, \
 being it major, minor or patch"
     method_option :preview, desc: 'Prints the preview of the next version',

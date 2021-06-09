@@ -22,6 +22,12 @@ describe Codelog::Config do
     end
   end
 
+  describe '#pending_changes_title' do
+    it 'returns the correct pending changelog title' do
+      expect(described_class.pending_changes_title).to eq('Pending Changes')
+    end
+  end
+
   describe '#header' do
     let(:mocked_header_file) { double(File, read: 'stubbed header') }
 
